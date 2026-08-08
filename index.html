@@ -578,82 +578,176 @@
     <p>&copy; 芦屋市山手町町内会 All Rights Reserved.</p>
   </footer>
 
-  <!-- スクリプト制御部 -->
-  <script>
-    function switchPage(pageId) {
-      document.getElementById('home-view').classList.remove('active');
-      document.getElementById('square-view').classList.remove('active');
+<script>
+// ==========================================
+// 山手町みんなの広場 フロント側 完全版
+// https://mimo-lgtm.github.io/yamate-cho/ に貼り付け
+// ==========================================
+const GAS_URL = "https://script.google.com/macros/s/AKfycbySsZlA2IKFhv8O1TYoMbmFf0BGm87-2bQfG8UprB7etUcytFvppl6grCZMgpueKyDG-w/exec"; // ★ここに新しいデプロイのURLを貼り付け
 
-      if (pageId === 'home') {
-        document.getElementById('home-view').classList.add('active');
-        window.scrollTo(0, 0);
-      } else if (pageId === 'square') {
-        document.getElementById('square-view').classList.add('active');
-        window.scrollTo(0, 0);
+document.addEventListener("DOMContentLoaded", function() {
+  const form = document.getElementById("postForm");
+  const authorInput = document.getElementById("authorName");
+  const commentInput = document.getElementById("comment");
+  const locationSelect = document.getElementById("location");
+  const imageInput = document.getElementById("imageInput");
+  const submitBtn = document.getElementById("submitBtn");
+  const statusDiv = document.getElementById("postStatus");
+  const listDiv = document.getElementById("postList");
+
+  let imageBase64 = "";
+  let mimeType = "";
+
+  // 画像をBase64に変換
+  if (imageInput) {
+    imageInput.addEventListener("change", function(e) {
+      const file = e.target.files[0];
+      if (!file) { imageBase64 = ""; mimeType = ""; return; }
+      if (file.size > 4 * 1024 * 1024) {
+        alert("画像は4MB以下にしてください");
+        e.target.value = "";
+        return;
       }
-    }
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        const result = ev.target.result;
+        // data:image/jpeg;base64,xxxx の部分を分割
+        const parts = result.split(",");
+        mimeType = parts[0].match(/:(.*?);/)[1];
+        imageBase64 = parts[1];
+        if (statusDiv) statusDiv.textContent = "画像読み込み完了: " + file.name;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
 
-    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbySsZlA2IKFhv8O1TYoMbmFf0BGm87-2bQfG8UprB7etUcytFvppl6grCZMgpueKyDG-w/exec";
+  // 投稿処理
+  if (form) {
+    form.addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const author = authorInput ? authorInput.value.trim() : "匿名";
+      const comment = commentInput ? commentInput.value.trim() : "";
+      const location = locationSelect ? locationSelect.value : "すべて";
 
-    function submitPost() {
-      const author = document.getElementById('postAuthor').value || "匿名";
-      const comment = document.getElementById('postComment').value;
-      const imageInput = document.getElementById('postImage');
-      const loadingMsg = document.getElementById('loadingMsg');
-
-      if (!comment && imageInput.files.length === 0) {
-        alert("コメントか写真のどちらかを入力してください。");
+      if (!comment && !imageBase64) {
+        alert("コメントか画像を入れてください");
         return;
       }
 
-      loadingMsg.style.display = "block";
+      submitBtn.disabled = true;
+      submitBtn.textContent = "投稿中…";
+      if (statusDiv) statusDiv.textContent = "AIがチェック中…";
 
-      if (imageInput.files.length > 0) {
-        const file = imageInput.files[0];
-        const reader = new FileReader();
-        
-        reader.onload = function(e) {
-          const base64String = e.target.result.split(',')[1];
-          const mimeType = file.type;
-          sendDataToGAS(author, comment, base64String, mimeType);
+      try {
+        const payload = {
+          author: author || "匿名",
+          comment: comment,
+          location: location,
+          imageBase64: imageBase64,
+          mimeType: mimeType
         };
-        reader.readAsDataURL(file);
-      } else {
-        sendDataToGAS(author, comment, "", "");
+
+        const res = await fetch(GAS_URL, {
+          method: "POST",
+          // 重要: application/jsonにするとCORSで死ぬのでtext/plainで送る
+          headers: {"Content-Type": "text/plain;charset=utf-8"},
+          body: JSON.stringify(payload)
+        });
+
+        const json = await res.json();
+
+        if (json.status === "success") {
+          if (statusDiv) statusDiv.textContent = "投稿完了！ " + (json.summary || "");
+          form.reset();
+          imageBase64 = "";
+          mimeType = "";
+          // 一覧を再読み込み
+          loadPosts();
+        } else if (json.status === "blocked") {
+          if (statusDiv) statusDiv.textContent = "ブロック: " + json.message;
+          alert(json.message);
+        } else {
+          if (statusDiv) statusDiv.textContent = "エラー: " + json.message;
+          alert("エラー: " + json.message);
+        }
+      } catch (err) {
+        console.error(err);
+        if (statusDiv) statusDiv.textContent = "通信エラー: " + err.message;
+        alert("通信エラーです。時間をおいて再試行してください。\n" + err.message);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "投稿する";
       }
-    }
+    });
+  }
 
-    function sendDataToGAS(author, comment, imageBase64, mimeType) {
-      const payload = {
-        author: author,
-        comment: comment,
-        imageBase64: imageBase64,
-        mimeType: mimeType,
-        location: "山手町内"
-      };
-
-      fetch(GAS_WEB_APP_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      })
-      .then(response => {
-        document.getElementById('loadingMsg').style.display = "none";
-        alert("投稿が完了しました！AIによる自動チェックとカテゴリ整理が行われました。");
-        document.getElementById('postComment').value = "";
-        document.getElementById('postImage').value = "";
-        document.getElementById('postAuthor').value = "";
-      })
-      .catch(error => {
-        document.getElementById('loadingMsg').style.display = "none";
-        console.error('Error:', error);
-        alert("通信エラーが発生しました。");
-      });
+  // 投稿一覧を読み込む
+  async function loadPosts() {
+    if (!listDiv) return;
+    try {
+      const res = await fetch(GAS_URL + "?action=list", {method: "GET"});
+      const json = await res.json();
+      if (json.status !== "success") {
+        listDiv.innerHTML = "<p>読み込み失敗: " + json.message + "</p>";
+        return;
+      }
+      const posts = json.data;
+      if (posts.length === 0) {
+        listDiv.innerHTML = "<p>まだ投稿がありません。最初の投稿をしてみましょう！</p>";
+        return;
+      }
+      listDiv.innerHTML = posts.map(p => {
+        const date = new Date(p.timestamp).toLocaleString("ja-JP");
+        const safeComment = escapeHtml(p.comment);
+        const safeAuthor = escapeHtml(p.author);
+        const safeCategory = escapeHtml(p.category);
+        const imgTag = p.imageUrl ? `<div style="margin-top:8px;"><img src="${p.imageUrl}" style="max-width:100%;border-radius:8px;max-height:300px;" loading="lazy"></div>` : "";
+        return `
+          <div style="border:1px solid #ddd;border-radius:10px;padding:14px;margin-bottom:12px;background:#fff;">
+            <div style="display:flex;justify-content:space-between;font-size:12px;color:#666;">
+              <span><b>${safeAuthor}</b> さん ・ ${safeCategory} ・ ${escapeHtml(p.location||"")}</span>
+              <span>${date}</span>
+            </div>
+            <div style="margin-top:8px;white-space:pre-wrap;">${safeComment}</div>
+            ${p.summary ? `<div style="margin-top:6px;font-size:12px;color:#2f7a6b;">AI要約: ${escapeHtml(p.summary)}</div>` : ""}
+            ${imgTag}
+          </div>
+        `;
+      }).join("");
+    } catch (err) {
+      console.error(err);
+      listDiv.innerHTML = "<p>一覧の読み込みに失敗しました: " + err.message + "</p>";
     }
-  </script>
+  }
+
+  function escapeHtml(s) {
+    return (s||"").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  }
+
+  // 初回読み込み
+  loadPosts();
+});
+</script>
+
+<!-- 
+  HTML側の例: このIDを合わせてください
+
+  <form id="postForm">
+    <input id="authorName" type="text" placeholder="お名前（匿名可）">
+    <select id="location">
+      <option value="すべて">すべて</option>
+      <option value="風景">🌿 風景</option>
+      <option value="街並み">🏡 街並み</option>
+      <option value="イベント">🎉 イベント</option>
+      <option value="ペット">🐾 ペット</option>
+    </select>
+    <input id="imageInput" type="file" accept="image/*">
+    <textarea id="comment" placeholder="コメントを入力"></textarea>
+    <button id="submitBtn" type="submit">投稿する</button>
+    <div id="postStatus"></div>
+  </form>
+  <div id="postList">読み込み中…</div>
+-->
 
 </body>
 </html>
