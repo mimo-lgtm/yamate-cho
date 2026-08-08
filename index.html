@@ -5,273 +5,226 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>芦屋市山手町町内会 公式サイト</title>
 <style>
-:root{--primary:#2f5d34;--accent:#e8a33d;--bg:#eef0e4;}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:"Zen Kaku Gothic New",sans-serif;background:var(--bg);color:#1b1f1d;line-height:1.7;}
-header{background:#1b3329;color:#fff;padding:18px;text-align:center;}
-.header-badge{display:inline-block;background:var(--accent);color:#000;padding:2px 10px;border-radius:999px;font-size:11px;font-weight:800;margin-bottom:6px;}
-.nav-container{background:#fff;border-bottom:1px solid #ddd;padding:10px;position:sticky;top:0;z-index:100;}
-.nav-grid{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:900px;margin:0 auto;}
-.nav-btn{border:1px solid #ddd;background:#f7f7f7;padding:8px 14px;border-radius:20px;text-decoration:none;color:#333;font-size:13px;font-weight:700;}
-.nav-btn.accent{background:#1b3329;color:#fff;border-color:#1b3329;}
-.container{max-width:900px;margin:0 auto;padding:20px;}
-.page-view{display:none;}
-.page-view.active{display:block;}
-.agreement-banner{background:#fff8e1;border:2px solid var(--accent);border-radius:10px;padding:14px;margin-bottom:18px;}
-.pillars-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:20px;}
-.pillar-card{background:#fff;border:1px solid #ddd;border-radius:10px;padding:16px;display:flex;flex-direction:column;justify-content:space-between;border-top:4px solid var(--primary);}
-.btn{border:none;background:var(--primary);color:#fff;padding:10px 16px;border-radius:8px;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block;text-align:center;}
-.btn-secondary{background:#eee;color:#333;border:1px solid #ccc;}
-.section-title{font-size:18px;font-weight:900;border-bottom:3px solid var(--primary);padding-bottom:6px;margin:20px 0 10px;}
-.news-list{list-style:none;}
-.news-item{background:#fff;border:1px solid #e5e5e5;border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:14px;}
-details{background:#fff;border:1px solid #ddd;border-radius:8px;padding:10px 12px;margin-bottom:10px;}
-summary{font-weight:800;cursor:pointer;}
-.back-home-bar{margin-bottom:12px;}
-.post-form-card{background:#fff;border:2px solid var(--accent);border-radius:12px;padding:16px;margin-bottom:16px;}
-.form-group{margin-bottom:10px;}
-.form-group label{font-size:12px;font-weight:800;display:block;margin-bottom:4px;}
-.form-control{width:100%;padding:10px;border:1.5px solid #ccc;border-radius:8px;}
-.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0;}
-.tab{padding:6px 12px;border-radius:999px;background:#fff;border:1px solid #ccc;font-size:12px;cursor:pointer;}
-.tab.active{background:var(--primary);color:#fff;border-color:var(--primary);}
-.post-card{background:#fff;border:1px solid #ddd;border-radius:10px;padding:12px;margin-bottom:10px;}
-.post-header{display:flex;justify-content:space-between;font-size:12px;color:#666;}
-.category-tag{background:#eef0e4;padding:2px 8px;border-radius:999px;font-size:11px;}
-.post-text{margin-top:8px;white-space:pre-wrap;}
-.post-footer{display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:#888;}
-.like-btn{border:1px solid #ddd;background:#fff;border-radius:999px;padding:2px 8px;cursor:pointer;}
-footer{text-align:center;padding:30px 0;color:#888;font-size:12px;}
-#postStatus{font-size:12px;color:#2f7a6b;margin-top:6px;min-height:18px;}
+:root{--bg:#f6f7f1;--card:#fff;--green:#2e7d32;--orange:#ef6c00;--gray:#6b7280;--line:#e5e7eb}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;color:#222;line-height:1.7}
+header{background:#fff;border-bottom:1px solid var(--line);padding:12px 16px;position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center}
+header h1{font-size:16px;margin:0}header h1 span{color:var(--green)}
+nav{display:flex;gap:8px;flex-wrap:wrap}
+nav button{border:1px solid var(--line);background:#fff;padding:6px 12px;border-radius:20px;cursor:pointer;font-size:13px}
+nav button.active{background:var(--green);color:#fff;border-color:var(--green)}
+main{max-width:1100px;margin:0 auto;padding:16px}
+.card{background:var(--card);border-radius:16px;padding:16px;border:1px solid var(--line);margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+h2{font-size:18px;margin:8px 0 12px;border-left:4px solid var(--green);padding-left:10px}
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.filter-bar button{border:1px solid var(--line);background:#fff;border-radius:20px;padding:8px 14px;cursor:pointer;font-size:14px}
+.filter-bar button.active{background:#222;color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.post-card{background:#fff;border-radius:16px;overflow:hidden;border:1px solid var(--line);display:flex;flex-direction:column}
+.post-card img{width:100%;height:200px;object-fit:cover;background:#eee}
+.post-body{padding:12px 14px;flex:1;display:flex;flex-direction:column}
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:10px;background:#eef6ee;color:var(--green);margin-right:6px}
+.meta{font-size:11px;color:var(--gray);margin:6px 0}
+.summary{font-weight:700;font-size:15px;margin:4px 0}
+.desc{font-size:13px;color:#444;margin-top:6px}
+.pagination{display:flex;gap:8px;justify-content:center;margin:20px 0;flex-wrap:wrap}
+.pagination button{padding:8px 14px;border-radius:8px;border:1px solid var(--line);background:#fff;cursor:pointer}
+.pagination button.active{background:var(--green);color:#fff}
+.post-form input, .post-form select, .post-form textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;margin:6px 0;font-size:14px}
+.post-form button{background:var(--green);color:#fff;border:none;padding:12px;border-radius:8px;width:100%;font-size:15px;cursor:pointer;margin-top:8px}
+.notice li{font-size:14px;margin:6px 0}
 </style>
-<script>
-// ★★★ 最優先で定義: ボタンより前に必ず読み込まれる ★★★
-function switchPage(pageId) {
-  // pageId: 'home' または 'square' を受け取る
-  var homeView = document.getElementById('home-view');
-  var squareView = document.getElementById('square-view');
-  if (!homeView || !squareView) return;
-  if (pageId === 'square' || pageId === 'board' || pageId === 'square-view') {
-    homeView.classList.remove('active');
-    squareView.classList.add('active');
-    if (typeof loadPosts === 'function') loadPosts();
-  } else {
-    squareView.classList.remove('active');
-    homeView.classList.add('active');
-  }
-  window.scrollTo(0,0);
-}
-function showPage(pageId){ return switchPage(pageId); }
-window.switchPage = switchPage;
-window.showPage = showPage;
-</script>
 </head>
 <body>
+<header>
+<h1><span>芦屋市</span> 山手町町内会</h1>
+<nav>
+<button class="active" onclick="showPage('home',this)">ホーム</button>
+<button onclick="showPage('board',this)">みんなの広場</button>
+<button onclick="showPage('post',this)">投稿する</button>
+</nav>
+</header>
+<main>
+<div id="home-view">
+<div class="card">
+<h2>📢 最新のお知らせ</h2>
+<ul class="notice">
+<li><b>2026年度 定時総会</b> 2025年5月23日(土) 10:00 山手小学校コミスク室</li>
+<li>6月山手緑地清掃活動 6月6日(土) 9:00-9:30 軍手・お菓子用意</li>
+<li>防犯パトロール 5月20日(水),6月17日(水) 19:30 山手小東門集合</li>
+</ul>
+<details><summary>過去のアーカイブを見る</summary>
+<ul class="notice" style="font-size:13px;color:#555">
+<li>5月山手緑地清掃終了 5月2日 多くのゴミ袋回収</li><li>4月パトロール定例会議終了</li><li>3月清掃活動 焼き芋キッチンカー 70名参加</li><li>12月ソレイユの会 竹園で豪華弁当</li><li>10月バスツアー カワサキワールド等</li><li>山手町まちづくり協定 2022年11月認可</li>
+</ul>
+</details>
+</div>
+<div class="card"><h2>🛡 防犯パトロール</h2><p>夜間の安全パトロールや通学路の見守り活動を毎月実施。隊員募集中。</p></div>
+<div class="card"><h2>✨ 加入募集</h2><p>新しく転居された方、地域活動に参加したい方を温かく歓迎します。</p></div>
+</div>
 
-  <header>
-    <span class="header-badge">芦屋市山手町</span>
-    <h1>山手町町内会 公式サイト</h1>
-    <p>街づくり協定を基盤に、安全で温かいつながりのあるまちへ</p>
-  </header>
+<div id="board-view" style="display:none">
+<div class="card">
+<h2>🕒 みんなの広場ボード</h2>
+<p style="font-size:13px;color:var(--gray)">テーマを選ぶとその投稿だけ表示。時系列は新着順。5件ずつページで表示。</p>
+<div class="filter-bar" id="filterBar">
+<button class="active" data-cat="all" onclick="filterCat('all',this)">🕒 時系列</button>
+<button data-cat="風景" onclick="filterCat('風景',this)">🌿 風景</button>
+<button data-cat="街並み" onclick="filterCat('街並み',this)">🏡 街並み</button>
+<button data-cat="イベント" onclick="filterCat('イベント',this)">🎉 イベント</button>
+<button data-cat="ペット" onclick="filterCat('ペット',this)">🐾 ペット</button>
+<button data-cat="通学路" onclick="filterCat('通学路',this)">🎒 通学路</button>
+</div>
+<div class="grid" id="postGrid"></div>
+<div class="pagination" id="pagination"></div>
+</div>
+</div>
 
-  <div class="nav-container">
-    <div class="nav-grid">
-      <a href="https://sites.google.com/view/yamatechoasiya-city/%E3%83%9B%E3%83%BC%E3%83%A0" class="nav-btn">🏠 ホーム</a>
-      <a href="https://sites.google.com/view/yamatechoasiya-city/%E9%98%B2%E7%8A%AF%E3%83%91%E3%83%88%E3%83%AD%E3%83%BC%E3%83%AB?authuser=0" class="nav-btn">🛡 防犯パトロール</a>
-      <a href="https://sites.google.com/view/yamatechoasiya-city/sokai?authuser=0" class="nav-btn">📋 総会</a>
-      <a href="https://sites.google.com/view/yamatechoasiya-city/kyotei?authuser=0" class="nav-btn">🏛 まちづくり協定</a>
-      <a href="https://sites.google.com/view/yamatechoasiya-city/public?authuser=0" class="nav-btn">🏢 公的機関</a>
-      <a href="https://sites.google.com/view/yamatechoasiya-city/recruit?authuser=0" class="nav-btn">✨ メンバー募集</a>
-      <a href="#" class="nav-btn accent" onclick="event.preventDefault(); switchPage('square');">💬 みんなの広場</a>
-      <a href="https://sites.google.com/view/yamatechoasiya-city/%E9%80%A3%E7%B5%A1%E5%85%88?authuser=0" class="nav-btn">📞 連絡先</a>
-    </div>
-  </div>
-
-  <div class="container">
-
-    <div id="home-view" class="page-view active">
-      <div class="agreement-banner">
-        <h4>🏛 私たちの活動の土台：山手町「街づくり協定」</h4>
-        <p>山手町の美しい自然環境、良好な住環境、そして安全で安心な暮らしを守るため、住民全員で共有している大切なルールと指針です。</p>
-      </div>
-      <div class="pillars-grid">
-        <div class="pillar-card">
-          <div><h3>🛡 防犯パトロール</h3><p>夜間の安全パトロールや通学路の見守りなど、日々の安心を守る活動状況を発信しています。</p></div>
-          <a href="https://sites.google.com/view/yamatechoasiya-city/%E9%98%B2%E7%8A%AF%E3%83%91%E3%83%88%E3%83%AD%E3%83%BC%E3%83%AB?authuser=0" class="btn btn-secondary">詳細を見る</a>
-        </div>
-        <div class="pillar-card">
-          <div><h3>✨ メンバー・加入募集</h3><p>新しく転居されてこられた方、地域活動に参加したい方をいつでも温かく歓迎いたします。</p></div>
-          <a href="https://sites.google.com/view/yamatechoasiya-city/recruit?authuser=0" class="btn btn-secondary">加入のご案内</a>
-        </div>
-        <div class="pillar-card" style="border-top-color: var(--accent);">
-          <div><h3>💬 みんなの広場</h3><p>スマホから簡単・匿名で意見や写真を投稿。AIが綺麗に整理して自動でボードに格納します。</p></div>
-          <button class="btn" onclick="switchPage('square')">広場を開く ➔</button>
-        </div>
-      </div>
-
-      <section>
-        <h2 class="section-title">📢 最新のお知らせ</h2>
-        <ul class="news-list" style="margin-bottom:1.5rem;">
-          <li class="news-item"><strong>2026年度の定時総会を下記の要領で開催します。</strong><br>【日程】2025年5月23日 土曜日 午前10:00 山手小学校コミスク室</li>
-          <li class="news-item"><strong>■ 6月山手緑地清掃活動のお知らせ</strong><br>6月6日（土）9:00-9:30 軍手、お菓子、飲料等をご用意しています。</li>
-          <li class="news-item"><strong>■防犯パトロールは月に1回夜間に実施</strong><br>5月20日（水）、6月17日（水）19:30 山手町学校 東門集合（雨天中止）</li>
-        </ul>
-        <details><summary>2026年・2025年の活動履歴</summary>
-          <ul class="news-list" style="font-size:0.88rem;">
-            <li class="news-item">■5月山手緑地清掃活動は終了しました。</li><li class="news-item">■防犯パトロール隊 4月定例会議は終了しました（4月18日）</li><li class="news-item">■4月山手緑地清掃活動は終了しました（4月11日）</li>
-          </ul>
-        </details>
-        <details><summary>2024年の活動履歴</summary><ul class="news-list"><li class="news-item">■山手コミスク 12月14日 餅もちフェスティバル大盛況終了。</li></ul></details>
-        <details><summary>2023年以前の主な記録</summary><ul class="news-list"><li class="news-item">■「山手町まちづくり協定」が2022年11月1日付で認可。</li></ul></details>
-      </section>
-    </div>
-
-    <div id="square-view" class="page-view">
-      <div class="back-home-bar"><button class="btn btn-secondary" onclick="switchPage('home')">⬅ ホーム画面に戻る</button></div>
-
-      <div class="post-form-card">
-        <h3>✍ 山手町 みんなの広場へ投稿する</h3>
-        <p style="font-size:0.85rem;color:#666;margin-bottom:1rem;">ID/PW不要。AIが自動でカテゴリ分類・モデレーションを行います。</p>
-        <div class="form-group"><label>お名前（匿名可）</label><input type="text" id="postAuthor" class="form-control" placeholder="例：山手町の住民"></div>
-        <div class="form-group"><label>写真を選択（任意）</label><input type="file" id="postImage" accept="image/*" class="form-control"></div>
-        <div class="form-group"><label>コメント</label><textarea id="postComment" class="form-control" rows="3" placeholder="今の街の様子やペットの写真をシェアしよう！"></textarea></div>
-        <div class="form-group"><label>カテゴリ</label><select id="postLocation" class="form-control"><option value="すべて">すべて</option><option value="風景">🌿 風景</option><option value="街並み">🏡 街並み</option><option value="イベント">🎉 イベント</option><option value="ペット">🐾 ペット</option><option value="通学路">通学路の安全</option></select></div>
-        <button class="btn" style="width:100%;background:var(--accent);color:#000;" onclick="submitPost()">AIチェック付きで投稿する</button>
-        <div id="loadingMsg" style="display:none;text-align:center;font-size:0.85rem;color:var(--accent);font-weight:bold;margin-top:0.75rem;">🤖 AIが内容を解析・確認中です...</div>
-        <div id="postStatus"></div>
-      </div>
-
-      <div class="tabs">
-        <div class="tab active" onclick="filterPosts('すべて',this)">すべて</div>
-        <div class="tab" onclick="filterPosts('風景',this)">🌿 風景</div>
-        <div class="tab" onclick="filterPosts('街並み',this)">🏡 街並み</div>
-        <div class="tab" onclick="filterPosts('イベント',this)">🎉 イベント</div>
-        <div class="tab" onclick="filterPosts('ペット',this)">🐾 ペット</div>
-        <div class="tab" onclick="filterPosts('通学路',this)">通学路</div>
-      </div>
-
-      <h2 class="section-title" style="border-bottom:none;margin-bottom:0.5rem;">🕒 新着の投稿</h2>
-      <div id="postList"><p>読み込み中…</p></div>
-
-      <div style="text-align:center;margin-top:2rem;"><button class="btn btn-secondary" onclick="switchPage('home')">⬅ ホーム画面に戻る</button></div>
-    </div>
-  </div>
-
-  <footer><p>&copy; 芦屋市山手町町内会 All Rights Reserved.</p></footer>
-
+<div id="post-view" style="display:none">
+<div class="card post-form">
+<h2>✍️ 投稿する</h2>
+<input id="postAuthor" placeholder="お名前（匿名可）">
+<select id="postLocation">
+<option value="すべて">すべて</option>
+<option value="風景">🌿 風景</option>
+<option value="街並み">🏡 街並み</option>
+<option value="イベント">🎉 イベント</option>
+<option value="ペット">🐾 ペット</option>
+<option value="通学路">🎒 通学路</option>
+</select>
+<input type="file" id="postImage" accept="image/*">
+<textarea id="postComment" rows="4" placeholder="コメントを入力してください"></textarea>
+<button onclick="submitPost()">投稿する</button>
+<div id="postStatus" style="font-size:13px;margin-top:8px;color:var(--green)"></div>
+</div>
+</div>
+</main>
 <script>
-// ==========================================
-// 設定: GASのURLをここに入れる
-// ==========================================
-const GAS_URL = "https://script.google.com/macros/s/AKfycbySsZlA2IKFhv8O1TYoMbmFf0BGm87-2bQfG8UprB7etUcytFvppl6grCZMgpueKyDG-w/exec"; // ★ここを差し替え
+// ===== 設定 =====
+const GAS_URL = "https://script.google.com/macros/s/AKfycbySsZlA2IKFhv8O1TYoMbmFf0BGm87-2bQfG8UprB7etUcytFvppl6grCZMgpueKyDG-w/exec"; // ★最新デプロイURLに置換
+const FOLDER_ID = "16m1uwk8qKwpolcYsrIcxfV_f8KZg8L-z";
+const ITEMS_PER_PAGE = 5;
 
-let imageBase64 = "";
-let mimeType = "";
-let allPosts = [];
-let currentFilter = "すべて";
+// 模擬投稿 5テーマ×3件 = 15件
+const MOCK_POSTS = [
+ // 風景
+ {timestamp:"2026-05-02T09:00:00", author:"山田", comment:"今朝の山手公園、桜吹雪が綺麗でした。", location:"風景", summary:"桜吹雪が舞う山手公園", category:"風景", imageUrl:"https://picsum.photos/seed/yamate-scenery1/600/400", description:"朝の散歩で撮影。桜の花びらが風に舞い、とても幻想的でした。"},
+ {timestamp:"2026-04-20T08:30:00", author:"佐藤", comment:"夕焼けの六甲山が絶景", location:"風景", summary:"夕焼けに染まる六甲山", category:"風景", imageUrl:"https://picsum.photos/seed/yamate-scenery2/600/400", description:"西の空がオレンジに染まり、六甲のシルエットがくっきり。思わず立ち止まりました。"},
+ {timestamp:"2026-04-10T07:00:00", author:"匿名", comment:"朝露の緑地", location:"風景", summary:"朝露に光る緑地公園", category:"風景", imageUrl:"https://picsum.photos/seed/yamate-scenery3/600/400", description:"清掃活動の前に一枚。朝露がキラキラしていて気持ちの良い朝でした。"},
+ // 街並み
+ {timestamp:"2026-05-01T14:00:00", author:"田中", comment:"ライト坂の新緑が気持ちいい", location:"街並み", summary:"ライト坂の新緑トンネル", category:"街並み", imageUrl:"https://picsum.photos/seed/yamate-town1/600/400", description:"新緑の季節、ライト坂はまるで緑のトンネル。歩くだけで癒されます。"},
+ {timestamp:"2026-03-15T11:00:00", author:"鈴木", comment:"山手町の石垣と椿", location:"街並み", summary:"石垣に咲く赤い椿", category:"街並み", imageUrl:"https://picsum.photos/seed/yamate-town2/600/400", description:"古い石垣に椿が映えます。山手町らしい風情のある一角です。"},
+ {timestamp:"2026-02-28T15:00:00", author:"高橋", comment:"朝の静かな住宅街", location:"街並み", summary:"朝の静かな山手の街並み", category:"街並み", imageUrl:"https://picsum.photos/seed/yamate-town3/600/400", description:"早朝の誰もいない通り。歴史を感じる街並みが好きです。"},
+ // イベント
+ {timestamp:"2026-05-02T10:00:00", author:"子ども会", comment:"緑地清掃 63袋回収！", location:"イベント", summary:"5月清掃で63袋回収達成", category:"イベント", imageUrl:"https://picsum.photos/seed/yamate-event1/600/400", description:"GWの清掃活動、親子含め70名近く参加。終わった後のお菓子が美味しかった！"},
+ {timestamp:"2026-03-07T09:30:00", author:"実行委員", comment:"焼き芋キッチンカー大人気", location:"イベント", summary:"焼き芋カーに長蛇の列", category:"イベント", imageUrl:"https://picsum.photos/seed/yamate-event2/600/400", description:"清掃後のご褒美に焼き芋。子どもたちに大人気で70名が集まりました。"},
+ {timestamp:"2026-01-11T09:00:00", author:"ソレイユの会", comment:"高齢者の集い 竹園で", location:"イベント", summary:"ソレイユの会 竹園で懇親", category:"イベント", imageUrl:"https://picsum.photos/seed/yamate-event3/600/400", description:"ホテル竹園でビーフ弁当を囲んで懇親会。笑顔あふれる会になりました。"},
+ // ペット
+ {timestamp:"2026-05-06T08:00:00", author:"わんこママ", comment:"今朝のお散歩風景 涼しい風", location:"ペット", summary:"涼しい風とお散歩ワンコ", category:"ペット", imageUrl:"https://picsum.photos/seed/yamate-pet1/600/400", description:"今朝は涼しくてお散歩日和。坂道をトコトコ歩く姿が可愛い。"},
+ {timestamp:"2026-04-18T16:00:00", author:"Mさん", comment:"緑地公園でボール遊び", location:"ペット", summary:"緑地でボール遊びに夢中", category:"ペット", imageUrl:"https://picsum.photos/seed/yamate-pet2/600/400", description:"広い緑地で思いっきり走り回りました。地域の方にも可愛がってもらってます。"},
+ {timestamp:"2026-03-20T10:00:00", author:"匿名", comment:"猫ちゃん日向ぼっこ", location:"ペット", summary:"石垣の上で日向ぼっこ猫", category:"ペット", imageUrl:"https://picsum.photos/seed/yamate-pet3/600/400", description:"山手町で出会った地域猫。日向ぼっこが気持ちよさそうです。"},
+ // 通学路
+ {timestamp:"2026-04-08T07:30:00", author:"見守り隊", comment:"新一年生の登校見守り開始", location:"通学路", summary:"新一年生の登校見守り", category:"通学路", imageUrl:"https://picsum.photos/seed/yamate-school1/600/400", description:"ピカピカのランドセルを背負った1年生。みんなで見守っていきましょう。"},
+ {timestamp:"2026-03-10T15:00:00", author:"PTA", comment:"ライト坂 危険箇所に旗設置", location:"通学路", summary:"ライト坂に安全旗を設置", category:"通学路", imageUrl:"https://picsum.photos/seed/yamate-school2/600/400", description:"車の通りが多いので、見通しの悪いカーブに旗を増設しました。"},
+ {timestamp:"2026-02-15T08:00:00", author:"パトロール隊", comment:"通学路の落枝を除去", location:"通学路", summary:"通学路の落枝を除去作業", category:"通学路", imageUrl:"https://picsum.photos/seed/yamate-school3/600/400", description:"強風で落ちた枝が通学路を塞いでいたので、朝一で除去。子どもたちは安全に登校できました。"},
+];
 
-document.addEventListener("DOMContentLoaded", function() {
-  const imageInput = document.getElementById("postImage");
-  if (imageInput) {
-    imageInput.addEventListener("change", function(e) {
-      const file = e.target.files[0];
-      if (!file) { imageBase64=""; mimeType=""; return; }
-      if (file.size > 4*1024*1024) { alert("画像は4MB以下に"); e.target.value=""; return; }
-      const reader = new FileReader();
-      reader.onload = function(ev) {
-        const result = ev.target.result;
-        const parts = result.split(",");
-        mimeType = parts[0].match(/:(.*?);/)[1];
-        imageBase64 = parts[1];
-        document.getElementById("postStatus").textContent = "画像読み込み完了: " + file.name;
-      };
-      reader.readAsDataURL(file);
-    });
-  }
-  loadPosts();
-});
+let allPosts = [...MOCK_POSTS];
+let currentFilter = "all";
+let currentPage = 1;
 
-async function submitPost() {
-  const author = document.getElementById("postAuthor").value.trim() || "匿名";
-  const comment = document.getElementById("postComment").value.trim();
-  const location = document.getElementById("postLocation").value;
-  const loadingMsg = document.getElementById("loadingMsg");
-  const statusDiv = document.getElementById("postStatus");
-
-  if (!comment && !imageBase64) { alert("コメントか画像を入れてください"); return; }
-
-  loadingMsg.style.display = "block";
-  statusDiv.textContent = "送信中…";
-
-  try {
-    const res = await fetch(GAS_URL, {
-      method: "POST",
-      headers: {"Content-Type": "text/plain;charset=utf-8"},
-      body: JSON.stringify({author, comment, location, imageBase64, mimeType})
-    });
-    const json = await res.json();
-    if (json.status === "success") {
-      statusDiv.textContent = "投稿完了！ " + (json.summary||"");
-      document.getElementById("postAuthor").value = "";
-      document.getElementById("postComment").value = "";
-      document.getElementById("postImage").value = "";
-      imageBase64=""; mimeType="";
-      loadPosts();
-    } else if (json.status === "blocked") {
-      statusDiv.textContent = "ブロック: " + json.message;
-      alert(json.message);
-    } else {
-      statusDiv.textContent = "エラー: " + json.message;
-      alert(json.message);
-    }
-  } catch(err) {
-    statusDiv.textContent = "通信エラー: " + err.message;
-    alert("通信エラー: " + err.message + "\nGASのURLとデプロイ設定（全員アクセス可）を確認してください");
-  } finally {
-    loadingMsg.style.display = "none";
-  }
+function showPage(id, btn){
+ document.getElementById('home-view').style.display = id==='home'?'block':'none';
+ document.getElementById('board-view').style.display = id==='board'?'block':'none';
+ document.getElementById('post-view').style.display = id==='post'?'block':'none';
+ document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+ if(btn) btn.classList.add('active');
+ if(id==='board') renderBoard();
 }
-
-async function loadPosts() {
-  const listDiv = document.getElementById("postList");
-  if (!listDiv) return;
-  listDiv.innerHTML = "<p>読み込み中…</p>";
-  try {
-    const res = await fetch(GAS_URL + "?action=list");
-    const json = await res.json();
-    if (json.status !== "success") { listDiv.innerHTML = "<p>失敗: "+json.message+"</p>"; return; }
-    allPosts = json.data;
-    renderPosts();
-  } catch(err) {
-    listDiv.innerHTML = "<p>読み込み失敗: "+err.message+"<br>GAS_URLがXXXXXのままになっていませんか？</p>";
+function filterCat(cat, btn){
+ currentFilter = cat;
+ currentPage = 1;
+ document.querySelectorAll('#filterBar button').forEach(b=>b.classList.remove('active'));
+ btn.classList.add('active');
+ renderBoard();
+}
+function getFiltered(){
+ let filtered = currentFilter==='all' ? [...allPosts] : allPosts.filter(p=>p.category===currentFilter || p.location===currentFilter);
+ filtered.sort((a,b)=> new Date(b.timestamp)-new Date(a.timestamp));
+ return filtered;
+}
+function renderBoard(){
+ const filtered = getFiltered();
+ const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
+ if(currentPage>totalPages) currentPage=totalPages;
+ const start = (currentPage-1)*ITEMS_PER_PAGE;
+ const pageItems = filtered.slice(start, start+ITEMS_PER_PAGE);
+ const grid = document.getElementById('postGrid');
+ grid.innerHTML = pageItems.map(p=>{
+   const date = new Date(p.timestamp).toLocaleDateString('ja-JP');
+   return `<div class="post-card"><img src="${p.imageUrl}" alt="${p.summary}" onerror="this.style.background='#ddd'"><div class="post-body"><div><span class="tag">${p.category}</span><span class="meta">${date}・${p.author}</span></div><div class="summary">${p.summary||p.comment.slice(0,20)}</div><div class="desc">${p.description||p.comment}</div></div></div>`;
+ }).join('') || '<p style="color:#888">投稿がありません</p>';
+ // pagination
+ const pag = document.getElementById('pagination');
+ let html='';
+ if(totalPages>1){
+   html+=`<button onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹ 前</button>`;
+   for(let i=1;i<=totalPages;i++){ html+=`<button class="${i===currentPage?'active':''}" onclick="goPage(${i})">ページ${i}</button>`; }
+   html+=`<button onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>次 ›</button>`;
+ }
+ pag.innerHTML=html;
+}
+function goPage(p){
+ const filtered=getFiltered();
+ const total=Math.ceil(filtered.length/ITEMS_PER_PAGE);
+ if(p<1||p>total) return;
+ currentPage=p;
+ renderBoard();
+ window.scrollTo({top:document.getElementById('board-view').offsetTop-20, behavior:'smooth'});
+}
+async function loadRealPosts(){
+ if(GAS_URL.includes('AKfycby')) return; // まだ仮URLならスキップ
+ try{
+  const res = await fetch(GAS_URL+"?action=list");
+  const json = await res.json();
+  if(json.status==='success' && json.data){
+    const real = json.data.map(r=>({timestamp:r.timestamp, author:r.author, comment:r.comment, summary:r.summary, category:r.category||r.location, location:r.location, imageUrl:r.imageUrl, description:r.comment}));
+    allPosts = [...real, ...MOCK_POSTS];
+    renderBoard();
   }
+ }catch(e){ console.log('loadReal fail',e); }
 }
-
-function renderPosts() {
-  const listDiv = document.getElementById("postList");
-  let posts = allPosts;
-  if (currentFilter !== "すべて") {
-    posts = allPosts.filter(p => (p.category||"").includes(currentFilter) || (p.location||"").includes(currentFilter));
-  }
-  if (posts.length===0) { listDiv.innerHTML = "<p>該当する投稿がありません</p>"; return; }
-  listDiv.innerHTML = posts.map(p => {
-    const date = new Date(p.timestamp).toLocaleString("ja-JP");
-    const imgTag = p.imageUrl ? `<div style="margin-top:8px;"><img src="${p.imageUrl}" style="max-width:100%;border-radius:8px;max-height:300px;" loading="lazy"></div>` : "";
-    return `<div class="post-card">
-      <div class="post-header"><span class="author">${escapeHtml(p.author)} さん</span><span class="category-tag">${escapeHtml(p.category||p.location||"その他")}</span></div>
-      <div class="post-body"><p class="post-text">${escapeHtml(p.comment)}</p>${p.summary?`<div style="font-size:12px;color:#2f7a6b;margin-top:4px;">AI要約: ${escapeHtml(p.summary)}</div>`:""}${imgTag}<div class="post-footer"><span>${date}</span></div></div>
-    </div>`;
-  }).join("");
+async function submitPost(){
+ const author=document.getElementById('postAuthor').value||'匿名';
+ const location=document.getElementById('postLocation').value;
+ const comment=document.getElementById('postComment').value;
+ const file=document.getElementById('postImage').files[0];
+ const status=document.getElementById('postStatus');
+ if(!comment && !file){ status.textContent='コメントか画像を入力してください'; return; }
+ status.textContent='投稿中...';
+ let imageBase64=null, mimeType=null;
+ if(file){
+  const reader=new FileReader();
+  const base64 = await new Promise(res=>{ reader.onload=()=>res(reader.result); reader.readAsDataURL(file); });
+  const parts=base64.split(',');
+  mimeType=parts[0].match(/:(.*?);/)[1];
+  imageBase64=parts[1];
+ }
+ try{
+  const payload={author, comment, location, imageBase64, mimeType};
+  const res=await fetch(GAS_URL,{method:'POST', body:JSON.stringify(payload)});
+  const json=await res.json();
+  if(json.status==='success'){
+   status.textContent='投稿しました！ボードに表示されます';
+   document.getElementById('postComment').value=''; document.getElementById('postImage').value='';
+   allPosts.unshift({timestamp:new Date().toISOString(), author, comment, summary:json.summary, category:json.category||location, location, imageUrl:json.imageUrl|| (imageBase64? `data:${mimeType};base64,${imageBase64}`:''), description:comment});
+   setTimeout(()=>{ showPage('board', document.querySelectorAll('nav button')[1]); }, 800);
+  }else if(json.status==='blocked'){ status.textContent='⚠ '+json.message; }
+  else{ status.textContent='エラー: '+json.message; }
+ }catch(e){ status.textContent='通信エラー: '+e; }
 }
-
-function filterPosts(cat, el) {
-  currentFilter = cat;
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  if (el) el.classList.add('active');
-  renderPosts();
-}
-
-function escapeHtml(s){return (s||"").replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+window.addEventListener('DOMContentLoaded', ()=>{ renderBoard(); loadRealPosts(); });
+// 互換: 旧switchPage呼び出し対応
+function switchPage(id){ showPage(id.replace('-view','').replace('home','home').replace('square','board').replace('tree','board')); }
 </script>
 </body>
 </html>
