@@ -32,16 +32,27 @@ details{background:#fff;border:1px solid #ddd;border-radius:8px;padding:10px 12p
 .form-control{width:100%;padding:10px;border:1.5px solid #ccc;border-radius:8px;}
 .tabs{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0;} .tab{padding:6px 12px;border-radius:999px;background:#fff;border:1px solid #ccc;font-size:12px;cursor:pointer;}
 .tab.active{background:var(--primary);color:#fff;border-color:var(--primary);}
-.post-card{background:#fff;border:1px solid #ddd;border-radius:10px;padding:12px;margin-bottom:10px;}
-.post-header{display:flex;justify-content:space-between;font-size:12px;color:#666;flex-wrap:wrap;gap:4px} .category-tag{background:#eef0e4;padding:2px 8px;border-radius:999px;font-size:11px;}
+.post-card{background:#fff;border:1px solid #ddd;border-radius:10px;padding:12px;margin-bottom:12px;}
+.post-header{display:flex;justify-content:space-between;font-size:12px;color:#666;flex-wrap:wrap;gap:4px}
+.category-tag{background:#eef0e4;padding:2px 8px;border-radius:999px;font-size:11px;}
+.post-text{margin-top:8px;white-space:pre-wrap;font-size:14px}
+.post-actions{display:flex;gap:12px;margin-top:10px;padding-top:10px;border-top:1px solid #eee;align-items:center;}
+.like-btn, .comment-btn{border:1px solid #ddd;background:#f7f7f7;padding:6px 12px;border-radius:20px;font-size:12px;cursor:pointer;font-weight:700;display:flex;gap:4px;align-items:center;}
+.like-btn.liked{background:#ffe0e0;border-color:#ff9999;color:#d00;}
+.comment-section{margin-top:10px;padding-top:8px;border-top:1px dashed #ddd;display:none;}
+.comment-section.open{display:block;}
+.comment-item{background:#f5f5f5;border-radius:8px;padding:6px 10px;margin-bottom:6px;font-size:12px;}
+.comment-form{display:flex;gap:6px;margin-top:8px;}
+.comment-form input{flex:1;padding:6px 10px;border:1px solid #ccc;border-radius:20px;font-size:12px;}
 footer{text-align:center;padding:30px 0;color:#888;font-size:12px;}
+#postStatus{font-size:12px;color:#2f7a6b;margin-top:6px;min-height:18px;}
 </style>
 <script>
 function switchPage(id){
   var h=document.getElementById('home-view');
   var s=document.getElementById('square-view');
   if(!h||!s) return;
-  if(id==='square'){h.classList.remove('active');s.classList.add('active');}
+  if(id==='square'){h.classList.remove('active');s.classList.add('active');renderPosts();}
   else{h.classList.add('active');s.classList.remove('active');}
   window.scrollTo(0,0);
 }
@@ -90,44 +101,95 @@ function toggleNotice(el){el.classList.toggle('open');}
 <div class="tab" onclick="filterPosts('ペット',this)">🐾 ペット</div>
 <div class="tab" onclick="filterPosts('通学路',this)">🎒 通学路</div>
 </div>
-<h2 class="section-title" style="border-bottom:none;">🕒 新着の投稿（年度別）</h2>
+<h2 class="section-title" style="border-bottom:none;">🕒 新着の投稿（いいね・コメントできます）</h2>
 <div id="postList"><p>読み込み中…</p></div><div id="pagination"></div><div id="postArchive" style="margin-top:16px"></div>
 <div style="text-align:center;margin-top:16px"><button class="btn btn-secondary" onclick="switchPage('home')">⬅ ホームに戻る</button></div>
 </div>
 </div>
 <footer>&copy; 芦屋市山手町町内会</footer>
 <script>
-const GAS_URL = "https://script.google.com/macros/s/AKfycby_placeholder/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbySsZlA2IKFhv8O1TYoMbmFf0BGm87-2bQfG8UprB7etUcytFvppl6grCZMgpueKyDG-w/exec";
 const ITEMS_PER_PAGE = 5;
 const NOTICE_DATA = [
-  {year:"2026", date:"2026-05-23", short:"2026年度 定時総会を開催します", content:"2026年度の定時総会を下記の要領で開催します。\n【日時】2025年5月23日 土曜日 午前10:00\n【場所】山手小学校コミスク室\n【議題】2025年度活動報告・決算、2026年度活動計画・予算、役員選出"},
-  {year:"2026", date:"2026-06-06", short:"6月 山手緑地清掃活動", content:"6月 山手緑地清掃活動を実施します。\n日時：6月6日(土) 9:00-9:30\n場所：山手緑地\n持ち物：軍手"},
+  {year:"2026", date:"2026-05-23", short:"2026年度 定時総会を開催します", content:"2026年度の定時総会を下記の要領で開催します。\n【日時】2025年5月23日 土曜日 午前10:00\n【場所】山手小学校コミスク室"},
+  {year:"2026", date:"2026-06-06", short:"6月 山手緑地清掃活動", content:"6月 山手緑地清掃活動を実施します。\n日時：6月6日(土) 9:00-9:30"},
   {year:"2026", date:"2026-05-20", short:"防犯パトロール実施", content:"防犯パトロールを実施します。\n5月20日(水),6月17日(水) 19:30 山手小東門集合"},
-  {year:"2025", date:"2025-05-02", short:"5月山手緑地清掃終了", content:"5月2日の山手緑地清掃では多くのゴミ袋を回収しました。ご協力ありがとうございました。"},
+  {year:"2025", date:"2025-05-02", short:"5月山手緑地清掃終了", content:"5月2日の山手緑地清掃では多くのゴミ袋を回収しました。"},
   {year:"2025", date:"2025-03-07", short:"3月清掃 焼き芋キッチンカー", content:"3月の清掃活動後に焼き芋キッチンカーを呼びました。70名が参加。"},
-  {year:"2024", date:"2024-12-15", short:"12月ソレイユの会 竹園で", content:"高齢者の集いソレイユの会をホテル竹園で開催。豪華弁当を囲んで懇親。"},
+  {year:"2024", date:"2024-12-15", short:"12月ソレイユの会 竹園で", content:"高齢者の集いソレイユの会をホテル竹園で開催。"},
   {year:"2024", date:"2024-10-20", short:"10月バスツアー", content:"10月バスツアーでカワサキワールド等を訪問しました。"},
   {year:"2023", date:"2023-11-10", short:"まちづくり協定認可", content:"山手町まちづくり協定が2022年11月に認可されました。"}
 ];
 const MOCK_POSTS = [
- {timestamp:"2026-05-02T09:00:00", author:"山田", short:"今朝の山手公園、桜吹雪が綺麗でした。", category:"風景", imageUrl:"https://picsum.photos/seed/yamate-scenery1/600/400", description:"今朝の山手公園、桜吹雪が綺麗でした。"},
- {timestamp:"2026-04-20T08:30:00", author:"佐藤", short:"夕焼けの六甲山が絶景", category:"風景", imageUrl:"https://picsum.photos/seed/yamate-scenery2/600/400", description:"夕焼けの六甲山が絶景でした。"},
- {timestamp:"2025-04-10T07:00:00", author:"匿名", short:"朝露の緑地", category:"風景", imageUrl:"https://picsum.photos/seed/yamate-scenery3/600/400", description:"朝露の緑地公園。"},
- {timestamp:"2026-05-01T14:00:00", author:"田中", short:"ライト坂の新緑が気持ちいい", category:"街並み", imageUrl:"https://picsum.photos/seed/yamate-town1/600/400", description:"ライト坂の新緑が気持ちいい季節です。"},
- {timestamp:"2025-03-15T11:00:00", author:"鈴木", short:"山手町の石垣と椿", category:"街並み", imageUrl:"https://picsum.photos/seed/yamate-town2/600/400", description:"古い石垣に椿が映えます。"},
- {timestamp:"2024-02-28T15:00:00", author:"高橋", short:"朝の静かな住宅街", category:"街並み", imageUrl:"https://picsum.photos/seed/yamate-town3/600/400", description:"早朝の誰もいない通り。"},
- {timestamp:"2026-05-02T10:00:00", author:"子ども会", short:"緑地清掃 63袋回収！", category:"イベント", imageUrl:"https://picsum.photos/seed/yamate-event1/600/400", description:"緑地清掃で63袋回収しました！"},
- {timestamp:"2025-03-07T09:30:00", author:"実行委員", short:"焼き芋キッチンカー大人気", category:"イベント", imageUrl:"https://picsum.photos/seed/yamate-event2/600/400", description:"焼き芋キッチンカー大人気でした。"},
- {timestamp:"2024-01-11T09:00:00", author:"ソレイユの会", short:"高齢者の集い 竹園で", category:"イベント", imageUrl:"https://picsum.photos/seed/yamate-event3/600/400", description:"高齢者の集いをホテル竹園で開催。"},
- {timestamp:"2026-05-06T08:00:00", author:"わんこママ", short:"今朝のお散歩風景 涼しい風", category:"ペット", imageUrl:"https://picsum.photos/seed/yamate-pet1/600/400", description:"今朝のお散歩風景。"},
- {timestamp:"2025-04-18T16:00:00", author:"Mさん", short:"緑地公園でボール遊び", category:"ペット", imageUrl:"https://picsum.photos/seed/yamate-pet2/600/400", description:"緑地公園でボール遊びに夢中です。"},
- {timestamp:"2024-03-20T10:00:00", author:"匿名", short:"猫ちゃん日向ぼっこ", category:"ペット", imageUrl:"https://picsum.photos/seed/yamate-pet3/600/400", description:"山手町で出会った地域猫。"},
- {timestamp:"2026-04-08T07:30:00", author:"見守り隊", short:"新一年生の登校見守り開始", category:"通学路", imageUrl:"https://picsum.photos/seed/yamate-school1/600/400", description:"新一年生の登校見守りを開始しました。"},
- {timestamp:"2025-03-10T15:00:00", author:"PTA", short:"ライト坂 危険箇所に旗設置", category:"通学路", imageUrl:"https://picsum.photos/seed/yamate-school2/600/400", description:"ライト坂の危険箇所に安全旗を設置しました。"},
- {timestamp:"2024-02-15T08:00:00", author:"パトロール隊", short:"通学路の落枝を除去", category:"通学路", imageUrl:"https://picsum.photos/seed/yamate-school3/600/400", description:"通学路の落枝を除去しました。"}
+ {id:"2026-05-02-1", timestamp:"2026-05-02T09:00:00", author:"山田", short:"今朝の山手公園、桜吹雪が綺麗でした。", category:"風景", imageUrl:"https://picsum.photos/seed/yamate-scenery1/600/400", description:"今朝の山手公園、桜吹雪が綺麗でした。"},
+ {id:"2026-04-20-2", timestamp:"2026-04-20T08:30:00", author:"佐藤", short:"夕焼けの六甲山が絶景", category:"風景", imageUrl:"https://picsum.photos/seed/yamate-scenery2/600/400", description:"夕焼けの六甲山が絶景でした。"},
+ {id:"2025-04-10-3", timestamp:"2025-04-10T07:00:00", author:"匿名", short:"朝露の緑地", category:"風景", imageUrl:"https://picsum.photos/seed/yamate-scenery3/600/400", description:"朝露の緑地公園。"},
+ {id:"2026-05-01-4", timestamp:"2026-05-01T14:00:00", author:"田中", short:"ライト坂の新緑が気持ちいい", category:"街並み", imageUrl:"https://picsum.photos/seed/yamate-town1/600/400", description:"ライト坂の新緑が気持ちいい季節です。"},
+ {id:"2025-03-15-5", timestamp:"2025-03-15T11:00:00", author:"鈴木", short:"山手町の石垣と椿", category:"街並み", imageUrl:"https://picsum.photos/seed/yamate-town2/600/400", description:"古い石垣に椿が映えます。"},
+ {id:"2024-02-28-6", timestamp:"2024-02-28T15:00:00", author:"高橋", short:"朝の静かな住宅街", category:"街並み", imageUrl:"https://picsum.photos/seed/yamate-town3/600/400", description:"早朝の誰もいない通り。"},
+ {id:"2026-05-02-7", timestamp:"2026-05-02T10:00:00", author:"子ども会", short:"緑地清掃 63袋回収！", category:"イベント", imageUrl:"https://picsum.photos/seed/yamate-event1/600/400", description:"緑地清掃で63袋回収しました！"},
+ {id:"2025-03-07-8", timestamp:"2025-03-07T09:30:00", author:"実行委員", short:"焼き芋キッチンカー大人気", category:"イベント", imageUrl:"https://picsum.photos/seed/yamate-event2/600/400", description:"焼き芋キッチンカー大人気でした。"},
+ {id:"2024-01-11-9", timestamp:"2024-01-11T09:00:00", author:"ソレイユの会", short:"高齢者の集い 竹園で", category:"イベント", imageUrl:"https://picsum.photos/seed/yamate-event3/600/400", description:"高齢者の集いをホテル竹園で開催。"},
+ {id:"2026-05-06-10", timestamp:"2026-05-06T08:00:00", author:"わんこママ", short:"今朝のお散歩風景 涼しい風", category:"ペット", imageUrl:"https://picsum.photos/seed/yamate-pet1/600/400", description:"今朝のお散歩風景。"},
+ {id:"2025-04-18-11", timestamp:"2025-04-18T16:00:00", author:"Mさん", short:"緑地公園でボール遊び", category:"ペット", imageUrl:"https://picsum.photos/seed/yamate-pet2/600/400", description:"緑地公園でボール遊びに夢中です。"},
+ {id:"2024-03-20-12", timestamp:"2024-03-20T10:00:00", author:"匿名", short:"猫ちゃん日向ぼっこ", category:"ペット", imageUrl:"https://picsum.photos/seed/yamate-pet3/600/400", description:"山手町で出会った地域猫。"},
+ {id:"2026-04-08-13", timestamp:"2026-04-08T07:30:00", author:"見守り隊", short:"新一年生の登校見守り開始", category:"通学路", imageUrl:"https://picsum.photos/seed/yamate-school1/600/400", description:"新一年生の登校見守りを開始しました。"},
+ {id:"2025-03-10-14", timestamp:"2025-03-10T15:00:00", author:"PTA", short:"ライト坂 危険箇所に旗設置", category:"通学路", imageUrl:"https://picsum.photos/seed/yamate-school2/600/400", description:"ライト坂の危険箇所に安全旗を設置しました。"},
+ {id:"2024-02-15-15", timestamp:"2024-02-15T08:00:00", author:"パトロール隊", short:"通学路の落枝を除去", category:"通学路", imageUrl:"https://picsum.photos/seed/yamate-school3/600/400", description:"通学路の落枝を除去しました。"}
 ];
 let imageBase64=""; let mimeType=""; let allPosts=[...MOCK_POSTS]; let currentFilter="すべて"; let currentPage=1;
 function esc(s){return (s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+// いいね・コメントのローカル保存
+function getLikeData(){
+  try{return JSON.parse(localStorage.getItem('yamate_likes')||'{}');}catch(e){return {};}
+}
+function getCommentData(){
+  try{return JSON.parse(localStorage.getItem('yamate_comments')||'{}');}catch(e){return {};}
+}
+function toggleLike(postId){
+  const likes=getLikeData();
+  if(!likes[postId]) likes[postId]={count:0, liked:false};
+  if(likes[postId].liked){likes[postId].count=Math.max(0,likes[postId].count-1); likes[postId].liked=false;}
+  else{likes[postId].count++; likes[postId].liked=true;}
+  localStorage.setItem('yamate_likes', JSON.stringify(likes));
+  updateLikeUI(postId);
+}
+function updateLikeUI(postId){
+  const likes=getLikeData();
+  const data=likes[postId]||{count:0, liked:false};
+  const btn=document.getElementById('like-btn-'+postId);
+  const cnt=document.getElementById('like-count-'+postId);
+  if(btn){btn.classList.toggle('liked', data.liked); btn.innerHTML = (data.liked?'❤️':'♡')+' いいね';}
+  if(cnt){cnt.textContent=data.count>0?data.count+'件のいいね':'';}
+}
+function toggleCommentSection(postId){
+  const sec=document.getElementById('comment-sec-'+postId);
+  if(sec) sec.classList.toggle('open');
+}
+function addComment(postId){
+  const input=document.getElementById('comment-input-'+postId);
+  const text=input.value.trim();
+  if(!text) return;
+  const comments=getCommentData();
+  if(!comments[postId]) comments[postId]=[];
+  comments[postId].push({text:text, date:new Date().toLocaleString('ja-JP'), author:'匿名'});
+  localStorage.setItem('yamate_comments', JSON.stringify(comments));
+  input.value='';
+  renderCommentList(postId);
+}
+function renderCommentList(postId){
+  const comments=getCommentData();
+  const list=comments[postId]||[];
+  const container=document.getElementById('comment-list-'+postId);
+  const countEl=document.getElementById('comment-count-'+postId);
+  if(countEl) countEl.textContent = list.length>0 ? list.length+'件のコメント' : '';
+  if(container){
+    container.innerHTML = list.map(c=>`<div class="comment-item"><b>${esc(c.author)}</b> <span style="color:#888">${esc(c.date)}</span><br>${esc(c.text)}</div>`).join('') || '<div style="font-size:11px;color:#888">まだコメントがありません</div>';
+  }
+  // コメントボタンのカウント更新
+  const btnCnt=document.getElementById('comment-btn-count-'+postId);
+  if(btnCnt) btnCnt.textContent = list.length>0 ? `(${list.length})` : '';
+}
 function renderNoticesYearly(data){
   const latestDiv=document.getElementById('noticeLatest'); const archDiv=document.getElementById('noticeArchive');
   if(!latestDiv) return;
@@ -137,7 +199,7 @@ function renderNoticesYearly(data){
   latestDiv.innerHTML='<ul class="news-list">'+latest.map(n=>`<li class="news-item" onclick="toggleNotice(this)"><div><b>${esc(n.date)}</b> ${esc(n.short)} <span style="color:#888;font-size:11px">▼全文</span></div><div class="full">${esc(n.content)}</div></li>`).join('')+'</ul>';
   const byYear={}; past.forEach(n=>{const y=n.year||n.date.slice(0,4); if(!byYear[y]) byYear[y]=[]; byYear[y].push(n);});
   const years=Object.keys(byYear).sort((a,b)=>b-a);
-  let html=''; years.forEach(y=>{html+=`<details><summary>📁 ${y}年度のお知らせ (${byYear[y].length}件) - クリックで全文</summary><ul class="news-list" style="margin-top:8px">`+byYear[y].map(n=>`<li class="news-item" onclick="toggleNotice(this)"><div><b>${esc(n.date)}</b> ${esc(n.short)} ▼</div><div class="full">${esc(n.content)}</div></li>`).join('')+'</ul></details>';});
+  let html=''; years.forEach(y=>{html+=`<details><summary>📁 ${y}年度のお知らせ (${byYear[y].length}件)</summary><ul class="news-list" style="margin-top:8px">`+byYear[y].map(n=>`<li class="news-item" onclick="toggleNotice(this)"><div><b>${esc(n.date)}</b> ${esc(n.short)} ▼</div><div class="full">${esc(n.content)}</div></li>`).join('')+'</ul></details>';});
   archDiv.innerHTML=html;
 }
 function getFiltered(){let f=allPosts; if(currentFilter!=="すべて") f=allPosts.filter(p=>(p.category||"").includes(currentFilter)); f=[...f].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp)); return f;}
@@ -151,7 +213,9 @@ function renderPosts(){
   const latestYear=years[0]; const latestPosts=byYear[latestYear]||[]; const pastYears=years.slice(1);
   const total=Math.ceil(latestPosts.length/ITEMS_PER_PAGE); if(currentPage>total) currentPage=Math.max(1,total);
   const start=(currentPage-1)*ITEMS_PER_PAGE; const items=latestPosts.slice(start,start+ITEMS_PER_PAGE);
-  list.innerHTML=`<h4 style="margin:8px 0">📅 ${latestYear}年度の投稿 (${latestPosts.length}件)</h4>`+items.map(p=>{const d=new Date(p.timestamp).toLocaleDateString('ja-JP'); const img=p.imageUrl?`<img src="${p.imageUrl}" style="width:100%;height:200px;object-fit:cover;border-radius:8px;margin-top:8px">`:''; return `<div class="post-card"><div class="post-header"><span>👤 ${esc(p.author)}</span><span class="category-tag">${esc(p.category)}</span><span>${d}</span></div><div style="font-weight:800;margin:4px 0">${esc(p.short)}</div><div>${esc(p.description)}</div>${img}</div>`;}).join('');
+  list.innerHTML=`<h4 style="margin:8px 0">📅 ${latestYear}年度の投稿 (${latestPosts.length}件)</h4>`+items.map(p=>renderPostCard(p)).join('');
+  // いいね・コメントUIを反映
+  items.forEach(p=>{updateLikeUI(p.id); renderCommentList(p.id);});
   if(total>1){
     let h=`<div style="display:flex;gap:6px;justify-content:center;margin:16px 0;flex-wrap:wrap">`;
     h+=`<button class="tab" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹ 前</button>`;
@@ -162,14 +226,40 @@ function renderPosts(){
   if(archDiv){
     if(pastYears.length===0){archDiv.innerHTML="";}
     else{
-      let ah=''; pastYears.forEach(y=>{const posts=byYear[y]; ah+=`<details><summary>📁 ${y}年度の投稿 (${posts.length}件)</summary><div style="margin-top:8px">`+posts.map(p=>{const d=new Date(p.timestamp).toLocaleDateString('ja-JP'); const img=p.imageUrl?`<img src="${p.imageUrl}" style="width:100%;height:150px;object-fit:cover;border-radius:8px;margin-top:6px">`:''; return `<div class="post-card" style="background:#fafafa"><div class="post-header"><span>👤 ${esc(p.author)}</span><span>${d}</span></div><div style="font-weight:700">${esc(p.short)}</div><div>${esc(p.description)}</div>${img}</div>`;}).join('')+'</div></details>';});
+      let ah=''; pastYears.forEach(y=>{const posts=byYear[y]; ah+=`<details><summary>📁 ${y}年度の投稿 (${posts.length}件)</summary><div style="margin-top:8px">`+posts.map(p=>renderPostCard(p)).join('')+'</div></details>';});
       archDiv.innerHTML=ah;
+      // 過去年度分もいいね・コメント反映
+      pastYears.forEach(y=>{byYear[y].forEach(p=>{updateLikeUI(p.id); renderCommentList(p.id);});});
     }
   }
 }
-function goPage(p){const filtered=getFiltered(); const byYear={}; filtered.forEach(x=>{const y=new Date(x.timestamp).getFullYear(); if(!byYear[y]) byYear[y]=[]; byYear[y].push(x);}); const years=Object.keys(byYear).sort((a,b)=>b-a); const latestPosts=byYear[years[0]]||[]; const total=Math.ceil(latestPosts.length/ITEMS_PER_PAGE); if(p<1||p>total) return; currentPage=p; renderPosts(); window.scrollTo({top:document.getElementById('postList').offsetTop-80,behavior:'smooth'});}
+function renderPostCard(p){
+  const d=new Date(p.timestamp).toLocaleDateString('ja-JP');
+  const img=p.imageUrl?`<img src="${p.imageUrl}" style="width:100%;height:200px;object-fit:cover;border-radius:8px;margin-top:8px" loading="lazy">`:'';
+  const likes=getLikeData()[p.id]||{count:0, liked:false};
+  const comments=getCommentData()[p.id]||[];
+  return `<div class="post-card" id="post-${p.id}">
+    <div class="post-header"><span>👤 ${esc(p.author)}</span><span class="category-tag">${esc(p.category)}</span><span>${d}</span></div>
+    <div style="font-weight:800;margin:4px 0">${esc(p.short)}</div>
+    <div>${esc(p.description)}</div>${img}
+    <div class="post-actions">
+      <button id="like-btn-${p.id}" class="like-btn ${likes.liked?'liked':''}" onclick="toggleLike('${p.id}')">${likes.liked?'❤️':'♡'} いいね</button>
+      <span id="like-count-${p.id}" style="font-size:11px;color:#888">${likes.count>0?likes.count+'件のいいね':''}</span>
+      <button class="comment-btn" onclick="toggleCommentSection('${p.id}')">💬 コメント <span id="comment-btn-count-${p.id}">${comments.length>0?`(${comments.length})`:''}</span></button>
+      <span id="comment-count-${p.id}" style="font-size:11px;color:#888;margin-left:auto">${comments.length>0?comments.length+'件のコメント':''}</span>
+    </div>
+    <div id="comment-sec-${p.id}" class="comment-section">
+      <div id="comment-list-${p.id}"></div>
+      <div class="comment-form">
+        <input id="comment-input-${p.id}" type="text" placeholder="コメントを入力...">
+        <button class="btn" style="padding:4px 12px;font-size:12px" onclick="addComment('${p.id}')">送信</button>
+      </div>
+    </div>
+  </div>`;
+}
+function goPage(p){const filtered=getFiltered(); const byYear={}; filtered.forEach(x=>{const y=new Date(x.timestamp).getFullYear(); if(!byYear[y]) byYear[y]=[]; byYear[y].push(x);}); const years=Object.keys(byYear).sort((a,b)=>b-a); const latestPosts=byYear[years[0]]||[]; const total=Math.ceil(latestPosts.length/ITEMS_PER_PAGE); if(p<1||p>total) return; currentPage=p; renderPosts();}
 function filterPosts(cat,el){currentFilter=cat; currentPage=1; document.querySelectorAll('#filterTabs .tab').forEach(x=>x.classList.remove('active')); if(el) el.classList.add('active'); renderPosts();}
-function submitPost(){ const a=document.getElementById('postAuthor').value||'匿名'; const c=document.getElementById('postComment').value; const l=document.getElementById('postLocation').value; if(!c && !imageBase64){alert('コメントか画像を');return;} allPosts.unshift({timestamp:new Date().toISOString(), author:a, short:c.slice(0,20), category:l, imageUrl:imageBase64?`data:${mimeType};base64,${imageBase64}`:'', description:c}); document.getElementById('postComment').value=''; imageBase64=''; currentFilter='すべて'; currentPage=1; document.querySelectorAll('#filterTabs .tab').forEach((x,i)=>x.classList.toggle('active',i===0)); renderPosts(); switchPage('square'); }
+function submitPost(){ const a=document.getElementById('postAuthor').value||'匿名'; const c=document.getElementById('postComment').value; const l=document.getElementById('postLocation').value; if(!c && !imageBase64){alert('コメントか画像を');return;} const newId='user-'+Date.now(); allPosts.unshift({id:newId, timestamp:new Date().toISOString(), author:a, short:c.slice(0,20), category:l, imageUrl:imageBase64?`data:${mimeType};base64,${imageBase64}`:'', description:c}); document.getElementById('postComment').value=''; imageBase64=''; currentFilter='すべて'; currentPage=1; document.querySelectorAll('#filterTabs .tab').forEach((x,i)=>x.classList.toggle('active',i===0)); renderPosts(); switchPage('square'); }
 document.addEventListener('DOMContentLoaded', ()=>{
   const inp=document.getElementById('postImage');
   if(inp){inp.addEventListener('change',e=>{const f=e.target.files[0]; if(!f){imageBase64="";return;} const r=new FileReader(); r.onload=ev=>{const p=ev.target.result.split(','); mimeType=p[0].match(/:(.*?);/)[1]; imageBase64=p[1];}; r.readAsDataURL(f);});}
