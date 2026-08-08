@@ -27,7 +27,7 @@
     header {
       background: linear-gradient(135deg, #2c5e3b 0%, #1e3f27 100%);
       color: var(--white);
-      padding: 2.5rem 1rem;
+      padding: 2.2rem 1rem;
       text-align: center;
       box-shadow: 0 4px 6px rgba(0,0,0,0.05);
     }
@@ -48,10 +48,57 @@
       font-size: 0.95rem;
       opacity: 0.9;
     }
+
+    /* ナビゲーションメニューボタン（7項目） */
+    .nav-container {
+      max-width: 900px;
+      margin: 1.25rem auto 0;
+      padding: 0 1rem;
+    }
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.6rem;
+    }
+    @media (min-width: 640px) {
+      .nav-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--white);
+      color: var(--primary);
+      border: 1px solid #d0e1d4;
+      padding: 0.65rem 0.4rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 0.85rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .nav-btn:hover {
+      background: var(--primary);
+      color: var(--white);
+      border-color: var(--primary);
+    }
+    .nav-btn.accent {
+      background: var(--accent);
+      color: var(--white);
+      border-color: var(--accent);
+    }
+    .nav-btn.accent:hover {
+      background: #b45309;
+    }
+
     .container {
       max-width: 900px;
       margin: 0 auto;
-      padding: 2rem 1rem;
+      padding: 1.5rem 1rem;
     }
     
     /* 画面切り替え用のクラス */
@@ -77,6 +124,7 @@
       margin-bottom: 0.25rem;
       font-size: 1rem;
     }
+    
     /* 3大柱セクション */
     .pillars-grid {
       display: grid;
@@ -328,6 +376,21 @@
     <p>街づくり協定を基盤に、安全で温かいつながりのあるまちへ</p>
   </header>
 
+  <!-- 7つのメニューボタン群（ご指定のリンク付き） -->
+  <div class="nav-container">
+    <div class="nav-grid">
+      <a href="https://sites.google.com/view/yamatechoasiya-city/%E3%83%9B%E3%83%BC%E3%83%A0" class="nav-btn">🏠 ホーム</a>
+      <a href="https://sites.google.com/view/yamatechoasiya-city/%E9%98%B2%E7%8A%AF%E3%83%91%E3%83%88%E3%83%AD%E3%83%BC%E3%83%AB?authuser=0" class="nav-btn">🛡 防犯パトロール</a>
+      <a href="https://sites.google.com/view/yamatechoasiya-city/sokai?authuser=0" class="nav-btn">📋 総会</a>
+      <a href="https://sites.google.com/view/yamatechoasiya-city/kyotei?authuser=0" class="nav-btn">🏛 まちづくり協定</a>
+      <a href="https://sites.google.com/view/yamatechoasiya-city/public?authuser=0" class="nav-btn">🏢 公的機関</a>
+      <a href="https://sites.google.com/view/yamatechoasiya-city/recruit?authuser=0" class="nav-btn">✨ メンバー募集</a>
+      <!-- みんなの広場は、サイト内切替も兼ねて強調表示 -->
+      <a href="https://sites.google.com/view/yamatechoasiya-city/agora?authuser=0" class="nav-btn accent" onclick="event.preventDefault(); switchPage('square');">💬 みんなの広場</a>
+      <a href="https://sites.google.com/view/yamatechoasiya-city/%E9%80%A3%E7%B5%A1%E5%85%88?authuser=0" class="nav-btn">📞 連絡先</a>
+    </div>
+  </div>
+
   <div class="container">
 
     <!-- ========================================== -->
@@ -349,7 +412,7 @@
             <h3>🛡 防犯パトロール</h3>
             <p>夜間の安全パトロールや通学路の見守りなど、日々の安心を守る活動状況を発信しています。</p>
           </div>
-          <a href="#patrol" class="btn btn-secondary">詳細を見る</a>
+          <a href="https://sites.google.com/view/yamatechoasiya-city/%E9%98%B2%E7%8A%AF%E3%83%91%E3%83%88%E3%83%AD%E3%83%BC%E3%83%AB?authuser=0" class="btn btn-secondary">詳細を見る</a>
         </div>
 
         <!-- 2. メンバー募集 -->
@@ -358,10 +421,10 @@
             <h3>✨ メンバー・加入募集</h3>
             <p>新しく転居されてこられた方、地域活動に参加したい方をいつでも温かく歓迎いたします。</p>
           </div>
-          <a href="#join" class="btn btn-secondary">加入のご案内</a>
+          <a href="https://sites.google.com/view/yamatechoasiya-city/recruit?authuser=0" class="btn btn-secondary">加入のご案内</a>
         </div>
 
-        <!-- 3. みんなの広場（クリックで広場画面へ切り替わり） -->
+        <!-- 3. みんなの広場 -->
         <div class="pillar-card" style="border-top-color: var(--accent);">
           <div>
             <h3>💬 みんなの広場</h3>
@@ -524,17 +587,15 @@
   <!-- 画面を切り替えるためのJavaScript -->
   <script>
     function switchPage(pageId) {
-      // すべてのビューを非表示にする
       document.getElementById('home-view').classList.remove('active');
       document.getElementById('square-view').classList.remove('active');
 
-      // 指定されたビューを表示する
       if (pageId === 'home') {
         document.getElementById('home-view').classList.add('active');
-        window.scrollTo(0, 0); // ページトップへ移動
+        window.scrollTo(0, 0);
       } else if (pageId === 'square') {
         document.getElementById('square-view').classList.add('active');
-        window.scrollTo(0, 0); // ページトップへ移動
+        window.scrollTo(0, 0);
       }
     }
   </script>
