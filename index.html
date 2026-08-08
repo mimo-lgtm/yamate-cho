@@ -3,6 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+function switchPage(id, el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  var t=document.getElementById(id);
+  if(t) t.classList.add('active');
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  if(el) el.classList.add('active');
+  window.scrollTo(0,0);
+  if(id==='board'||id==='tree'){ if(typeof loadPosts==='function') loadPosts(); if(typeof renderBoard==='function') renderBoard(); }
+}
+function showPage(id, el){ return switchPage(id, el); }
+</script>
   <title>芦屋市山手町町内会・公式サイト</title>
   <style>
     :root {
