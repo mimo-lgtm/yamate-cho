@@ -49,7 +49,7 @@
       opacity: 0.9;
     }
 
-    /* ナビゲーションメニューボタン（7項目） */
+    /* 7つのナビゲーションメニューボタン */
     .nav-container {
       max-width: 900px;
       margin: 1.25rem auto 0;
@@ -234,22 +234,39 @@
       font-size: 0.85rem;
     }
 
-    /* みんなの広場専用のスタイル */
+    /* みんなの広場＆投稿フォームのスタイル */
     .back-home-bar {
       margin-bottom: 1.5rem;
     }
-    .post-box-mock {
+    .post-form-card {
       background: var(--white);
-      border: 2px dashed #cbd5e0;
+      border: 2px dashed var(--accent);
       padding: 1.25rem;
       border-radius: 8px;
-      text-align: center;
       margin-bottom: 2rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
     }
-    .post-box-mock h3 {
+    .post-form-card h3 {
       font-size: 1rem;
       color: var(--primary);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+    .form-group {
+      margin-bottom: 0.75rem;
+    }
+    .form-group label {
+      font-size: 0.8rem;
+      font-weight: bold;
+      display: block;
+      margin-bottom: 0.25rem;
+      color: #4a5568;
+    }
+    .form-control {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #cbd5e0;
+      border-radius: 4px;
+      font-size: 0.9rem;
     }
     .tabs {
       display: flex;
@@ -303,16 +320,6 @@
       font-size: 0.75rem;
       font-weight: bold;
     }
-    .post-img {
-      width: 100%;
-      height: 200px;
-      background: #e2e8f0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #718096;
-      font-size: 0.9rem;
-    }
     .post-body {
       padding: 1rem;
     }
@@ -329,11 +336,7 @@
       font-size: 0.85rem;
       color: #718096;
     }
-    .action-btns {
-      display: flex;
-      gap: 1rem;
-    }
-    .like-btn, .comment-btn {
+    .like-btn {
       background: none;
       border: none;
       cursor: pointer;
@@ -345,19 +348,6 @@
     }
     .like-btn:hover {
       color: #e53e3e;
-    }
-    .comments-section {
-      background: #f7fafc;
-      padding: 0.75rem 1rem;
-      border-top: 1px solid #edf2f7;
-      font-size: 0.85rem;
-    }
-    .comment-item {
-      margin-bottom: 0.3rem;
-    }
-    .comment-author {
-      font-weight: bold;
-      color: #2d3748;
     }
 
     footer {
@@ -376,7 +366,7 @@
     <p>街づくり協定を基盤に、安全で温かいつながりのあるまちへ</p>
   </header>
 
-  <!-- 7つのメニューボタン群（ご指定のリンク付き） -->
+  <!-- 7つのメニューボタン群 -->
   <div class="nav-container">
     <div class="nav-grid">
       <a href="https://sites.google.com/view/yamatechoasiya-city/%E3%83%9B%E3%83%BC%E3%83%A0" class="nav-btn">🏠 ホーム</a>
@@ -385,7 +375,6 @@
       <a href="https://sites.google.com/view/yamatechoasiya-city/kyotei?authuser=0" class="nav-btn">🏛 まちづくり協定</a>
       <a href="https://sites.google.com/view/yamatechoasiya-city/public?authuser=0" class="nav-btn">🏢 公的機関</a>
       <a href="https://sites.google.com/view/yamatechoasiya-city/recruit?authuser=0" class="nav-btn">✨ メンバー募集</a>
-      <!-- みんなの広場は、サイト内切替も兼ねて強調表示 -->
       <a href="https://sites.google.com/view/yamatechoasiya-city/agora?authuser=0" class="nav-btn accent" onclick="event.preventDefault(); switchPage('square');">💬 みんなの広場</a>
       <a href="https://sites.google.com/view/yamatechoasiya-city/%E9%80%A3%E7%B5%A1%E5%85%88?authuser=0" class="nav-btn">📞 連絡先</a>
     </div>
@@ -404,9 +393,8 @@
         <p>山手町の美しい自然環境、良好な住環境、そして安全で安心な暮らしを守るため、住民全員で共有している大切なルールと指針です。</p>
       </div>
 
-      <!-- 3大重視項目（グリッドカード） -->
+      <!-- 3大重視項目 -->
       <div class="pillars-grid">
-        <!-- 1. 防犯パトロール -->
         <div class="pillar-card">
           <div>
             <h3>🛡 防犯パトロール</h3>
@@ -415,7 +403,6 @@
           <a href="https://sites.google.com/view/yamatechoasiya-city/%E9%98%B2%E7%8A%AF%E3%83%91%E3%83%88%E3%83%AD%E3%83%BC%E3%83%AB?authuser=0" class="btn btn-secondary">詳細を見る</a>
         </div>
 
-        <!-- 2. メンバー募集 -->
         <div class="pillar-card">
           <div>
             <h3>✨ メンバー・加入募集</h3>
@@ -424,154 +411,86 @@
           <a href="https://sites.google.com/view/yamatechoasiya-city/recruit?authuser=0" class="btn btn-secondary">加入のご案内</a>
         </div>
 
-        <!-- 3. みんなの広場 -->
         <div class="pillar-card" style="border-top-color: var(--accent);">
           <div>
             <h3>💬 みんなの広場</h3>
-            <p>スマホから簡単・匿名で意見や写真を投稿。AIが綺麗に整理してボードに格納します。</p>
+            <p>スマホから簡単・匿名で意見や写真を投稿。AIが綺麗に整理して自動でボードに格納します。</p>
           </div>
           <button class="btn" onclick="switchPage('square')">広場を開く ➔</button>
         </div>
       </div>
 
-      <!-- ホームのお知らせ（未来の予定 ＆ 年月別アーカイブ） -->
+      <!-- お知らせ -->
       <section>
         <h2 class="section-title">📢 お知らせ・更新情報</h2>
-        
-        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem; font-weight: bold;">【これからの予定・最新のお知らせ】</p>
         <ul class="news-list" style="margin-bottom: 1.5rem;">
-          <li class="news-item">
-            <span>9月度 防犯パトロール実施について（集合場所・時間のご案内）</span>
-            <span class="news-date">2026.09.10 予定</span>
-          </li>
-          <li class="news-item">
-            <span>秋のクリーン作戦（側溝清掃・草刈り）のお知らせ</span>
-            <span class="news-date">2026.09.27 予定</span>
-          </li>
+          <li class="news-item"><span>9月度 防犯パトロール実施について（集合場所・時間のご案内）</span><span class="news-date">2026.09.10 予定</span></li>
+          <li class="news-item"><span>秋のクリーン作戦（側溝清掃・草刈り）のお知らせ</span><span class="news-date">2026.09.27 予定</span></li>
         </ul>
-
-        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem; font-weight: bold;">【過去のお知らせ（年月別アーカイブ）】</p>
-        
-        <details>
-          <summary>2026年8月 (2件)</summary>
-          <ul class="news-list">
-            <li class="news-item"><span>8月の防犯パトロール実施スケジュールについて</span><span class="news-date">2026.08.01</span></li>
-            <li class="news-item"><span>夏期役員会だよりを発行しました</span><span class="news-date">2026.08.05</span></li>
-          </ul>
-        </details>
-
-        <details>
-          <summary>2026年7月 (1件)</summary>
-          <ul class="news-list">
-            <li class="news-item"><span>夏期クリーン作戦へのご協力お礼と結果報告</span><span class="news-date">2026.07.15</span></li>
-          </ul>
-        </details>
-
-        <details>
-          <summary>2026年6月 (1件)</summary>
-          <ul class="news-list">
-            <li class="news-item"><span>新住民の皆様へ：町内会加入のご案内と手続きについて</span><span class="news-date">2026.06.20</span></li>
-          </ul>
-        </details>
-      </section>
-
-      <!-- 防犯パトロールの詳細エリア -->
-      <section id="patrol">
-        <h2 class="section-title">🛡 防犯パトロールの取り組み</h2>
-        <p style="font-size: 0.9rem; margin-bottom: 1rem;">
-          山手町では、住民の皆様が安全に安心して暮らせるよう、定期的な夜間パトロールや子どもたちの下校時の見守り活動を行っています。街づくり協定の精神にのっとり、お互いの顔が見える安心の街を維持しています。
-        </p>
-      </section>
-
-      <!-- メンバー募集の詳細エリア -->
-      <section id="join">
-        <h2 class="section-title">✨ 新規加入・メンバー募集</h2>
-        <p style="font-size: 0.9rem; margin-bottom: 1rem;">
-          山手町町内会では、一緒に地域を支えてくれる仲間や、新しく転居されてきた方のご加入をいつでもお待ちしております。「みんなの広場」からも気軽にお問い合わせやご相談が可能です。
-        </p>
-        <button class="btn btn-secondary" onclick="switchPage('square')">みんなの広場へ移動する</button>
       </section>
 
     </div><!-- /HOME VIEW -->
 
 
     <!-- ========================================== -->
-    <!-- 【画面B】 みんなの広場画面                 -->
+    <!-- 【画面B】 みんなの広場画面 ＆ 投稿フォーム    -->
     <!-- ========================================== -->
     <div id="square-view" class="page-view">
 
-      <!-- ホームへ戻るバー -->
       <div class="back-home-bar">
         <button class="btn btn-secondary" onclick="switchPage('home')">⬅ ホーム画面に戻る</button>
       </div>
 
-      <!-- 投稿への誘導 -->
-      <div class="post-box-mock">
-        <h3>💬 山手町 みんなの広場へようこそ！</h3>
-        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.75rem;">IDやパスワード不要。スマホから写真を選んで投稿するだけで、AIが自動で適切な場所に整理します。</p>
-        <button class="btn" style="background: var(--accent);" onclick="alert('投稿フォームが開きます（モック）')">＋ 新しい声を投稿する</button>
+      <!-- AI連携型 投稿フォーム -->
+      <div class="post-form-card">
+        <h3>✍️ 山手町 みんなの広場へ投稿する</h3>
+        <p style="font-size: 0.85rem; color: #666; margin-bottom: 1rem;">ID/PW不要。投稿された写真やコメントはAIが自動でカテゴリ分類・モデレーションを行います。</p>
+        
+        <div class="form-group">
+          <label>お名前（匿名可）</label>
+          <input type="text" id="postAuthor" class="form-control" placeholder="例：山手町の住民">
+        </div>
+
+        <div class="form-group">
+          <label>写真を選択（任意）</label>
+          <input type="file" id="postImage" accept="image/*" style="font-size: 0.85rem;">
+        </div>
+
+        <div class="form-group">
+          <label>コメント</label>
+          <textarea id="postComment" class="form-control" rows="3" placeholder="今の街の様子やペットの写真をシェアしよう！"></textarea>
+        </div>
+
+        <button class="btn" style="width: 100%; background: var(--accent);" onclick="submitPost()">AIチェック付きで投稿する</button>
+        <div id="loadingMsg" style="display: none; text-align: center; font-size: 0.85rem; color: var(--accent); font-weight: bold; margin-top: 0.75rem;">🤖 AIが内容を解析・確認中です...しばらくお待ちください</div>
       </div>
 
       <!-- カテゴリ絞り込みタブ -->
       <div class="tabs">
-        <div class="tab active">すべて (12)</div>
-        <div class="tab">🌿 山手町の風景</div>
-        <div class="tab">🧑 人物・スナップ</div>
+        <div class="tab active">すべて</div>
+        <div class="tab">🌿 風景</div>
         <div class="tab">🏡 街並み</div>
         <div class="tab">🎉 イベント</div>
-        <div class="tab">🐾 ペットと一緒</div>
+        <div class="tab">🐾 ペット</div>
       </div>
 
-      <h2 class="section-title" style="border-bottom: none; margin-bottom: 0.5rem;">🕒 新着の投稿（時系列）</h2>
+      <h2 class="section-title" style="border-bottom: none; margin-bottom: 0.5rem;">🕒 新着の投稿</h2>
 
-      <!-- 投稿カード 1（ペットと一緒） -->
+      <!-- 投稿表示カード（例） -->
       <div class="post-card">
         <div class="post-header">
           <span class="author">山手町の住民（匿名） さん</span>
-          <span class="category-tag">🐾 ペットと一緒</span>
-        </div>
-        <div class="post-img">
-          [ 投稿された写真（例：散歩中のワンちゃん） ]
+          <span class="category-tag">🐾 ペット</span>
         </div>
         <div class="post-body">
-          <p class="post-text">今朝の坂道のお散歩風景です。涼しい風が吹いていて気持ちよさそうでした！お気に入りのスポットです。</p>
+          <p class="post-text">今朝の坂道のお散歩風景です。涼しい風が吹いていて気持ちよさそうでした！</p>
           <div class="post-footer">
             <span>2026年8月8日 投稿</span>
-            <div class="action-btns">
-              <button class="like-btn" onclick="alert('「いいね！」しました！')">❤️ いいね (5)</button>
-              <button class="comment-btn">💬 コメント (1)</button>
-            </div>
-          </div>
-        </div>
-        <div class="comments-section">
-          <div class="comment-item">
-            <span class="comment-author">近所の人：</span>いつもこの道で会う子ですね！かわいい写真ありがとうございます。
+            <button class="like-btn" onclick="alert('「いいね！」しました！')">❤️ いいね (5)</button>
           </div>
         </div>
       </div>
 
-      <!-- 投稿カード 2（風景） -->
-      <div class="post-card">
-        <div class="post-header">
-          <span class="author">三丁目・田中 さん</span>
-          <span class="category-tag">🌿 山手町の風景</span>
-        </div>
-        <div class="post-img">
-          [ 投稿された写真（例：夕暮れの山手町の景色） ]
-        </div>
-        <div class="post-body">
-          <p class="post-text">夕方の空があまりにも綺麗だったのでパシャリ。静かな住宅街のこの雰囲気がとても好きです。</p>
-          <div class="post-footer">
-            <span>2026年8月7日 投稿</span>
-            <div class="action-btns">
-              <button class="like-btn" onclick="alert('「いいね！」しました！')">❤️ いいね (12)</button>
-              <button class="comment-btn">💬 コメント (2)</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 下部にもホームへ戻るボタン -->
       <div style="text-align: center; margin-top: 2rem;">
         <button class="btn btn-secondary" onclick="switchPage('home')">⬅ ホーム画面に戻る</button>
       </div>
@@ -584,8 +503,9 @@
     <p>&copy; 芦屋市山手町町内会 All Rights Reserved.</p>
   </footer>
 
-  <!-- 画面を切り替えるためのJavaScript -->
+  <!-- スクリプト制御部 -->
   <script>
+    // 画面切り替え関数
     function switchPage(pageId) {
       document.getElementById('home-view').classList.remove('active');
       document.getElementById('square-view').classList.remove('active');
@@ -597,6 +517,71 @@
         document.getElementById('square-view').classList.add('active');
         window.scrollTo(0, 0);
       }
+    }
+
+    // ==========================================
+    // GASウェブアプリ連携による投稿処理
+    // ==========================================
+    const GAS_WEB_APP_URL = "ここにデプロイして取得したGASのウェブアプリURLを貼り付けてください";
+
+    function submitPost() {
+      const author = document.getElementById('postAuthor').value || "匿名";
+      const comment = document.getElementById('postComment').value;
+      const imageInput = document.getElementById('postImage');
+      const loadingMsg = document.getElementById('loadingMsg');
+
+      if (!comment && imageInput.files.length === 0) {
+        alert("コメントか写真のどちらかを入力してください。");
+        return;
+      }
+
+      loadingMsg.style.display = "block";
+
+      if (imageInput.files.length > 0) {
+        const file = imageInput.files[0];
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+          const base64String = e.target.result.split(',')[1];
+          const mimeType = file.type;
+          sendDataToGAS(author, comment, base64String, mimeType);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        sendDataToGAS(author, comment, "", "");
+      }
+    }
+
+    function sendDataToGAS(author, comment, imageBase64, mimeType) {
+      const payload = {
+        author: author,
+        comment: comment,
+        imageBase64: imageBase64,
+        mimeType: mimeType,
+        location: "山手町内"
+      };
+
+      fetch(GAS_WEB_APP_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      })
+      .then(response => {
+        document.getElementById('loadingMsg').style.display = "none";
+        alert("投稿が完了しました！AIによる自動チェックとカテゴリ整理が行われました。");
+        // フォームをリセット
+        document.getElementById('postComment').value = "";
+        document.getElementById('postImage').value = "";
+        document.getElementById('postAuthor').value = "";
+      })
+      .catch(error => {
+        document.getElementById('loadingMsg').style.display = "none";
+        console.error('Error:', error);
+        alert("通信エラーが発生しました。");
+      });
     }
   </script>
 
