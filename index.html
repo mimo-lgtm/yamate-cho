@@ -64,7 +64,22 @@ function toggleNotice(el){el.classList.toggle('open');}
 </div>
 <section><h2 class="section-title">📢 最新のお知らせ（クリックで全文）</h2><div id="noticeLatest"></div><div id="noticeArchive" style="margin-top:12px"></div></section>
 </div>
+
 <div id="square-view" class="page-view">
+<div class="post-form-card" style="background:#fff;border:2px solid var(--accent);border-radius:12px;padding:16px;margin-bottom:16px;">
+<h3 style="font-size:15px;margin-bottom:10px;">✍️ 投稿フォーム（画像とコメントで投稿）</h3>
+<div style="display:grid;gap:10px;">
+<div><label style="font-size:12px;font-weight:800;">お名前（匿名可）</label><input type="text" id="postAuthor" placeholder="例：山手町の住民" style="width:100%;padding:8px 10px;border:1.5px solid #ccc;border-radius:8px;"></div>
+<div><label style="font-size:12px;font-weight:800;">写真（任意）</label><input type="file" id="postImage" accept="image/*" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:8px;"><div id="imagePreview" style="margin-top:8px;"></div></div>
+<div><label style="font-size:12px;font-weight:800;">コメント（チワワなどペットの言葉が入ると自動でペットに分類されます）</label><textarea id="postComment" rows="3" placeholder="例：今朝のお散歩でチワワと公園へ。涼しい風が気持ちよかった！" style="width:100%;padding:10px;border:1.5px solid #ccc;border-radius:8px;"></textarea></div>
+<div style="display:flex;gap:8px;align-items:end;flex-wrap:wrap;">
+<div style="flex:1;"><label style="font-size:12px;font-weight:800;">カテゴリ（自動判定されますが変更可）</label><select id="postCategory" style="width:100%;padding:8px;border:1.5px solid #ccc;border-radius:8px;"><option value="auto">🤖 自動判定</option><option value="風景">🌿 風景</option><option value="街並み">🏡 街並み</option><option value="イベント">🎉 イベント</option><option value="ペット">🐾 ペット</option><option value="通学路">🎒 通学路</option><option value="その他">その他</option></select><div id="autoCategoryHint" style="font-size:11px;color:#2f5d34;margin-top:4px;min-height:16px;"></div></div>
+<button onclick="submitPost()" style="padding:10px 20px;background:var(--accent);color:#000;border:none;border-radius:20px;font-weight:800;cursor:pointer;">投稿する</button>
+</div>
+<div id="postStatus" style="font-size:12px;color:#2f7a6b;margin-top:6px;min-height:18px;"></div>
+</div>
+</div>
+
 <div class="tabs" id="filterTabs">
 <div class="tab active" onclick="filterPosts('すべて',this)">🕒 時系列</div>
 <div class="tab" onclick="filterPosts('風景',this)">🌿 風景</div>
@@ -77,6 +92,7 @@ function toggleNotice(el){el.classList.toggle('open');}
 <div id="postList"></div><div id="pagination"></div><div id="postArchive" style="margin-top:16px"></div>
 <div style="text-align:center;margin-top:16px"><button class="btn btn-secondary" onclick="switchPage('home')">⬅ ホームに戻る</button></div>
 </div>
+
 </div>
 <footer>&copy; 芦屋市山手町町内会 | 元データ: agora - みんなの広場<br><small>画像差し替え: MOCK_POSTS の imageUrl を実際の画像パスに変更してください。現在は確実に表示されるプレースホルダーです。</small></footer>
 <script>
@@ -152,13 +168,93 @@ function updateLikeUI(id){const likes=getLikeData();const d=likes[id]||{count:0,
 function toggleCommentSection(id){const sec=document.getElementById('comment-sec-'+id);if(sec)sec.classList.toggle('open');}
 function addComment(id){const input=document.getElementById('comment-input-'+id);const text=input.value.trim();if(!text)return;const comments=getCommentData();if(!comments[id])comments[id]=[];comments[id].push({text:text,date:new Date().toLocaleString('ja-JP')});localStorage.setItem('yamate_comments', JSON.stringify(comments));input.value='';renderCommentList(id);}
 function renderCommentList(id){const comments=getCommentData();const list=comments[id]||[];const container=document.getElementById('comment-list-'+id);if(container){container.innerHTML=list.map(c=>"<div class=\"comment-item\">"+esc(c.text)+" <span style=\"color:#888\">"+esc(c.date)+"</span></div>").join("")||"<div style=\"font-size:11px;color:#888\">まだコメントなし</div>";}}
+function loadUserPosts(){
+  try{
+    const saved = JSON.parse(localStorage.getItem('yamate_user_posts')||"[]");
+    if(saved.length>0){
+      allPosts = [...saved, ...allPosts.filter(p=>!p.isUserPost)];
+    }
+  }catch(e){ console.log(e); }
+}
+
+function detectCategory(text){
+  const t = (text||"").toLowerCase();
+  if(/チワワ|ちわわ|犬|わんこ|ワンコ|いぬ|ねこ|ネコ|猫|にゃんこ|ペット|ぺっと|うさぎ|ハムスター|インコ|散歩|さんぽ/.test(t)) return "ペット";
+  if(/風景|桜|さくら|夕焼け|夕日|富士山|六甲|紅葉|新緑|雪|朝焼け|景色|空/.test(t)) return "風景";
+  if(/街並み|街なみ|ライト坂|石垣|住宅|建物|マンション|坂/.test(t)) return "街並み";
+  if(/イベント|清掃|そうじ|祭り|まつり|バスツアー|ラジオ体操|総会|集い|ソレイユ|コンサート|焼き芋/.test(t)) return "イベント";
+  if(/通学|登校|下校|小学校|学校|通学路|見守り|旗|PTA/.test(t)) return "通学路";
+  return "その他";
+}
+function updateAutoCategoryHint(){
+  const comment = document.getElementById('postComment')?.value || "";
+  const catSelect = document.getElementById('postCategory');
+  const hint = document.getElementById('autoCategoryHint');
+  if(!hint) return;
+  if(!comment.trim()){ hint.textContent=""; return; }
+  const detected = detectCategory(comment);
+  if(catSelect && catSelect.value==="auto"){
+    hint.textContent = "🤖 自動判定: 「" + detected + "」として投稿されます（例：チワワ→ペット）";
+  }else{
+    hint.textContent = "自動判定は「" + detected + "」ですが、手動で「" + catSelect.value + "」が選択されています";
+  }
+}
+function submitPost(){
+  const authorEl = document.getElementById('postAuthor');
+  const commentEl = document.getElementById('postComment');
+  const categoryEl = document.getElementById('postCategory');
+  const statusEl = document.getElementById('postStatus');
+  const author = (authorEl?.value||"").trim() || "匿名";
+  const comment = (commentEl?.value||"").trim();
+  if(!comment && !imageBase64 && !imagePreviewUrl){ alert("コメントか画像を入れてください"); return; }
+  let category = categoryEl?.value || "auto";
+  if(category==="auto"){ category = detectCategory(comment); }
+  let imgUrl = "https://picsum.photos/seed/"+Date.now()+"/600/400";
+  if(imageBase64){ imgUrl = "data:image/jpeg;base64,"+imageBase64; }
+  else if(imagePreviewUrl){ imgUrl = imagePreviewUrl; }
+  const newPost = { timestamp: new Date().toISOString(), author: author, summary: comment.slice(0,25)+(comment.length>25?"…":""), category: category, imageUrl: imgUrl, description: comment, isUserPost: true };
+  try{ const existing = JSON.parse(localStorage.getItem('yamate_user_posts')||"[]"); existing.unshift(newPost); localStorage.setItem('yamate_user_posts', JSON.stringify(existing)); }catch(e){}
+  allPosts.unshift(newPost);
+  if(authorEl) authorEl.value=""; if(commentEl) commentEl.value=""; if(categoryEl) categoryEl.value="auto";
+  const imgInput = document.getElementById('postImage'); if(imgInput) imgInput.value="";
+  imageBase64=""; imagePreviewUrl=""; const preview = document.getElementById('imagePreview'); if(preview) preview.innerHTML="";
+  if(statusEl){ statusEl.textContent="✅ 投稿しました！「"+category+"」として保存されました。再訪問しても消えません。"; }
+  updateAutoCategoryHint(); currentFilter="すべて"; document.querySelectorAll('#filterTabs .tab').forEach(t=>t.classList.remove('active')); const firstTab=document.querySelector('#filterTabs .tab'); if(firstTab) firstTab.classList.add('active'); renderPosts();
+  if(typeof sendToGAS === 'function'){ sendToGAS(newPost); }
+  setTimeout(()=>{ if(statusEl) statusEl.textContent=""; }, 4000);
+}
+
 function renderNoticesYearly(data){const latestDiv=document.getElementById('noticeLatest');const archDiv=document.getElementById('noticeArchive');if(!latestDiv)return;const sorted=[...data].sort((a,b)=>new Date(b.date)-new Date(a.date));const latest=sorted.slice(0,3);const past=sorted.slice(3);latestDiv.innerHTML="<ul class=\"news-list\">"+latest.map(n=>"<li class=\"news-item\" onclick=\"toggleNotice(this)\"><div><b>"+esc(n.date)+"</b> "+esc(n.short)+" <span style=\"color:#888;font-size:11px\">▼全文</span></div><div class=\"full\">"+esc(n.content)+"</div></li>").join("")+"</ul>";const byYear={};past.forEach(n=>{const y=n.year||n.date.slice(0,4);if(!byYear[y])byYear[y]=[];byYear[y].push(n);});let html="";Object.keys(byYear).sort((a,b)=>b-a).forEach(y=>{html+="<details><summary>📁 "+y+"年度のお知らせ ("+byYear[y].length+"件) - クリックで全文</summary><ul class=\"news-list\" style=\"margin-top:8px\">"+byYear[y].map(n=>"<li class=\"news-item\" onclick=\"toggleNotice(this)\"><div><b>"+esc(n.date)+"</b> "+esc(n.short)+" ▼</div><div class=\"full\">"+esc(n.content)+"</div></li>").join("")+"</ul></details>";});archDiv.innerHTML=html;}
 function getFiltered(){let f=allPosts;if(currentFilter!=="すべて")f=allPosts.filter(p=>p.category.includes(currentFilter));f=[...f].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));return f;}
 function renderPostCard(p){const d=new Date(p.timestamp).toLocaleDateString("ja-JP");const img="<img src=\""+p.imageUrl+"\" style=\"width:100%;height:240px;object-fit:cover;border-radius:10px;margin-top:10px;display:block;\" loading=\"lazy\" onerror=\"this.src='https://picsum.photos/seed/fallback/600/400';\">";const likes=getLikeData()[p.timestamp]||{count:0,liked:false};const comments=getCommentData()[p.timestamp]||[];return "<div class=\"post-card\"><div class=\"post-header\"><span>👤 "+esc(p.author)+"</span><span class=\"category-tag\">"+esc(p.category)+"</span><span>"+d+"</span></div><div style=\"font-weight:800;margin:8px 0 4px;font-size:15px;\">"+esc(p.summary)+"</div><div style=\"font-size:14px;line-height:1.6;white-space:pre-wrap;background:#fafafa;padding:10px;border-radius:8px;margin:6px 0;\">"+esc(p.description)+"</div>"+img+"<div class=\"post-actions\"><button id=\"like-btn-"+p.timestamp+"\" class=\"like-btn "+(likes.liked?"liked":"")+"\" onclick=\"toggleLike('"+p.timestamp+"')\">"+(likes.liked?"❤️":"♡")+" いいね</button><span id=\"like-count-"+p.timestamp+"\" style=\"font-size:11px;color:#888\">"+(likes.count>0?likes.count+"件":"")+"</span><button class=\"comment-btn\" onclick=\"toggleCommentSection('"+p.timestamp+"')\">💬 コメント ("+comments.length+")</button></div><div id=\"comment-sec-"+p.timestamp+"\" class=\"comment-section\"><div id=\"comment-list-"+p.timestamp+"\"></div><div style=\"display:flex;gap:6px;margin-top:6px\"><input id=\"comment-input-"+p.timestamp+"\" placeholder=\"コメントを入力\" style=\"flex:1;padding:6px 10px;border:1px solid #ccc;border-radius:20px;\"><button onclick=\"addComment('"+p.timestamp+"')\" style=\"padding:6px 12px;border-radius:20px;border:1px solid #2f5d34;background:#2f5d34;color:#fff;\">送信</button></div></div></div>";}
 function renderPosts(){const list=document.getElementById("postList");const pag=document.getElementById("pagination");const arch=document.getElementById("postArchive");const filtered=getFiltered();if(!list)return;if(filtered.length===0){list.innerHTML="<div style=\"background:#fff;padding:20px;border-radius:10px;text-align:center\">該当する投稿がありません</div>";pag.innerHTML="";arch.innerHTML="";return;}const byYear={};filtered.forEach(p=>{const y=new Date(p.timestamp).getFullYear();if(!byYear[y])byYear[y]=[];byYear[y].push(p);});const years=Object.keys(byYear).sort((a,b)=>b-a);const latestYear=years[0];const latestPosts=byYear[latestYear]||[];const total=Math.ceil(latestPosts.length/ITEMS_PER_PAGE);if(currentPage>total)currentPage=Math.max(1,total);const start=(currentPage-1)*ITEMS_PER_PAGE;const items=latestPosts.slice(start,start+ITEMS_PER_PAGE);list.innerHTML="<h4 style=\"margin:8px 0\">📅 "+latestYear+"年度の投稿 ("+latestPosts.length+"件)</h4>"+items.map(p=>renderPostCard(p)).join("");items.forEach(p=>{updateLikeUI(p.timestamp);renderCommentList(p.timestamp);});let h="";if(total>1){h+="<div style=\"display:flex;gap:6px;justify-content:center;margin:16px 0;flex-wrap:wrap\">";for(let i=1;i<=total;i++)h+="<button class=\"tab "+(i===currentPage?"active":"")+"\" onclick=\"goPage("+i+")\">ページ"+i+"</button>";h+="</div>";}pag.innerHTML=h;if(arch){let ah="";years.slice(1).forEach(y=>{ah+="<details open><summary>📁 "+y+"年度の投稿 ("+byYear[y].length+"件)</summary><div style=\"margin-top:8px\">"+byYear[y].map(p=>renderPostCard(p)).join("")+"</div></details>";});arch.innerHTML=ah;years.slice(1).forEach(y=>{byYear[y].forEach(p=>{updateLikeUI(p.timestamp);renderCommentList(p.timestamp);});});}}
 function goPage(p){const filtered=getFiltered();const byYear={};filtered.forEach(x=>{const y=new Date(x.timestamp).getFullYear();if(!byYear[y])byYear[y]=[];byYear[y].push(x);});const years=Object.keys(byYear).sort((a,b)=>b-a);const latestPosts=byYear[years[0]]||[];const total=Math.ceil(latestPosts.length/ITEMS_PER_PAGE);if(p<1||p>total)return;currentPage=p;renderPosts();}
 function filterPosts(cat,el){currentFilter=cat;currentPage=1;document.querySelectorAll("#filterTabs .tab").forEach(x=>x.classList.remove("active"));if(el)el.classList.add("active");renderPosts();}
-document.addEventListener("DOMContentLoaded",()=>{renderNoticesYearly(NOTICE_DATA);renderPosts();loadFromGAS();});
+document.addEventListener("DOMContentLoaded",()=>{
+  loadUserPosts();
+  renderNoticesYearly(NOTICE_DATA);
+  renderPosts();
+  if(typeof loadFromGAS === 'function') loadFromGAS();
+  const commentEl = document.getElementById('postComment');
+  if(commentEl){ commentEl.addEventListener('input', updateAutoCategoryHint); }
+  const catEl = document.getElementById('postCategory');
+  if(catEl){ catEl.addEventListener('change', updateAutoCategoryHint); }
+  const imgEl = document.getElementById('postImage');
+  if(imgEl){
+    imgEl.addEventListener('change', function(e){
+      const file = e.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = function(ev){
+        imageBase64 = ev.target.result.split(',')[1];
+        imagePreviewUrl = ev.target.result;
+        const preview = document.getElementById('imagePreview');
+        if(preview) preview.innerHTML = '<img src="'+ev.target.result+'" style="width:100%;max-height:200px;object-fit:cover;border-radius:8px;">';
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+});
 </script>
 </body>
 </html>
